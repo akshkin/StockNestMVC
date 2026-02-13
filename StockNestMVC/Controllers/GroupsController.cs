@@ -39,6 +39,29 @@ public class GroupsController : ControllerBase
         }
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetGroupById(int id)
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null) return BadRequest("No user found");
+
+            var group = await _groupRepo.GetGroupById(id, user);
+
+            if (group == null)
+            {
+                return NotFound($"Group with id {id} not found");
+            }
+            return Ok(group);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("create")]
     public async Task<IActionResult> CreateGroup(CreateGroupDto createGroupDto)
     {
@@ -72,6 +95,8 @@ public class GroupsController : ControllerBase
             if (user == null) return BadRequest("No user found");
 
             var updatedGroup = await _groupRepo.UpdateGroup(id, updateGroupDto, user);
+
+            if (updatedGroup == null) return NotFound($"Group with id {id} not found");
 
             return Ok(updatedGroup);
         }

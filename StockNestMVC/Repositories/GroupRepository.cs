@@ -62,7 +62,11 @@ public class GroupRepository : IGroupRepository
 
     public async Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user)
     {
-        var existingGroup = await _context.Groups.FirstOrDefaultAsync(ug => ug.GroupId == id);
+        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
+            .Select(ug => ug.Group)
+            .FirstOrDefaultAsync(ug => ug.GroupId == id);
+
         if (existingGroup == null)
         {
             throw new Exception($"Group with id {id} not found");
@@ -98,5 +102,18 @@ public class GroupRepository : IGroupRepository
             .ToListAsync();
 
         return userGroups.Select(ug => ug.Group.ToGroupDto());
+    }
+
+    public async Task<GroupDto?> GetGroupById(int id, AppUser user)
+    {
+        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
+            .Select(ug => ug.Group)
+            .FirstOrDefaultAsync(ug => ug.GroupId == id);
+
+        if (existingGroup == null) return null;
+
+        return existingGroup.ToGroupDto();
+
     }
 }
