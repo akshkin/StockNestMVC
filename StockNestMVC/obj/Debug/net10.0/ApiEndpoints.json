@@ -238,12 +238,28 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.ItemsController",
-    "Method": "Index",
-    "RelativePath": "api/Items",
-    "HttpMethod": "",
+    "Method": "CreateItem",
+    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/create",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "categoryId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "createItemDto",
+        "Type": "StockNestMVC.DTOs.Item.CreateItemDto",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]
