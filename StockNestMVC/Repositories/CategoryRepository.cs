@@ -93,4 +93,26 @@ public class CategoryRepository : ICategoryRepository
         await _context.SaveChangesAsync();
         return category;
     }
+
+    public async Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user)
+    {
+        var membership = await _context.UserGroup
+           .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (membership == null)
+            throw new Exception("You are not a member of this group");
+
+        if (membership.Role != "Owner")
+            throw new Exception("Only owners can delete a category");
+
+        var category = await _context.Categories.Include(c => c.Items)
+            .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
+
+        if (category == null) return null;
+
+        _context.Categories.Remove(category);
+        await _context.SaveChangesAsync();
+
+        return category.ToCategoryDto();
+    }
 }

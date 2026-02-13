@@ -13,4 +13,6 @@ public interface ICategoryRepository
 
     public Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto);
 
+    public Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user);
+
 }

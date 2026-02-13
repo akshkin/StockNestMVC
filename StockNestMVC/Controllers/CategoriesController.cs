@@ -97,6 +97,25 @@ public class CategoriesController : ControllerBase
         }
     }
 
+    [HttpPost("delete/{groupId}/category/{categoryId}")]
+    public async Task<IActionResult> DeleteCategory(int groupId, int categoryId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+            if (user == null) return Unauthorized("No user found");
+
+            var category = await _categoryRepo.DeleteCategory(groupId, categoryId, user);
+            if (category == null) return NotFound($"Category with id {categoryId} not found");
+
+            return Ok("Successfully deleted category");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     private async Task<AppUser?> IsUserExists()
     {
         var user = await _userManager.GetUserAsync(User);
