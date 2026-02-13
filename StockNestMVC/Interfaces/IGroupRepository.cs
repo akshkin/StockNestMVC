@@ -7,7 +7,7 @@ public interface IGroupRepository
 {
     public Task<IEnumerable<GroupDto>> GetAllUserGroups(AppUser user);
 
-    public Task<Group?> GetGroupById(int id, AppUser user);
+    public Task<GroupDto?> GetGroupById(int id, AppUser user);
 
     public Task<GroupDto> CreateGroup(CreateGroupDto createGroupDto, AppUser user);
 

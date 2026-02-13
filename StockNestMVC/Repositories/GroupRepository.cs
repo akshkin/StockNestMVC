@@ -57,7 +57,7 @@ public class GroupRepository : IGroupRepository
         await _context.UserGroup.AddAsync(userGroup);
         await _context.SaveChangesAsync();
 
-        return newGroup.ToGroupDto();
+        return newGroup.ToGroupDto(userGroup.Role);
     }
 
     public async Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user)
@@ -83,11 +83,13 @@ public class GroupRepository : IGroupRepository
             throw new Exception("Group with the same name already exists");
         }
 
+        var role = await GetRoleInGroup(id, user);
+
         existingGroup.Name = updateGroupDto.Name;
 
         await _context.SaveChangesAsync();
 
-        return existingGroup.ToGroupDto();
+        return existingGroup;
 
     }
 
@@ -98,37 +100,42 @@ public class GroupRepository : IGroupRepository
             .Where(ug => ug.UserId == user.Id)
             .ToListAsync();
 
-        return userGroups.Select(ug => ug.Group.ToGroupDto());
+        return userGroups.Select(ug => ug.Group.ToGroupDto(ug.Role));
     }
 
-    public async Task<Group?> GetGroupById(int id, AppUser user)
+    public async Task<GroupDto?> GetGroupById(int id, AppUser user)
     {
         var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
             .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
             .Select(ug => ug.Group)
             .FirstOrDefaultAsync(ug => ug.GroupId == id);
 
+        var roleInGroup = await GetRoleInGroup(id, user);
+
         if (existingGroup == null) return null;
 
-        return existingGroup;
-
+        return existingGroup.ToGroupDto(roleInGroup);
     }
 
     public async Task<GroupDto?> DeleteGroup(int id, AppUser user)
     {
-        var existingGroup = await GetGroupById(id, user);
+        // since the get by id method returns a dto, it cannot be reused here
+        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
+             .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
+             .Select(ug => ug.Group)
+             .FirstOrDefaultAsync(ug => ug.GroupId == id);
 
         if (existingGroup == null) return null;
 
         // check if user is the owner
-        var owner = await CheckIfUserIsOwner(id, user);
+        var role = await GetRoleInGroup(id, user);
 
-        if (!owner)
+        if (role != "Owner")
             throw new Exception("Only the group owner can delete the group");
 
         _context.Remove(existingGroup);
         await _context.SaveChangesAsync();
-        return existingGroup.ToGroupDto();
+        return existingGroup.ToGroupDto(role);
     }
 
     public async Task InviteUser(int groupId, AppUser invitedUser, string role,  AppUser user)
@@ -139,9 +146,9 @@ public class GroupRepository : IGroupRepository
             throw new Exception("Group not found");
 
         // Check if inviter is Owner
-        var inviterMember = await CheckIfUserIsOwner(groupId, user);
+        var inviterMember = await GetRoleInGroup(groupId, user);
 
-        if (!inviterMember)
+        if (inviterMember != "Owner")
             throw new Exception("Only the group owner can invite users");
 
        
@@ -165,15 +172,15 @@ public class GroupRepository : IGroupRepository
 
     }
 
-    public async Task<bool> CheckIfUserIsOwner (int id, AppUser user)
+    public async Task<string> GetRoleInGroup (int id, AppUser user)
     {
         // check if user is the owner
-        var owner = await _context.UserGroup
+        var appUser = await _context.UserGroup
            .FirstOrDefaultAsync(ug => ug.GroupId == id && ug.UserId == user.Id);
 
-        if (owner == null || owner.Role != "Owner")
-            return false;
+        if (appUser == null || appUser.Role != "Owner")
+            return null;
 
-        return true;
+        return appUser.Role;
     }
 }

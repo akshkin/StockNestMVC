@@ -55,7 +55,7 @@ public class GroupsController : ControllerBase
             {
                 return NotFound($"Group with id {id} not found");
             }
-            return Ok(group.ToGroupDto());
+            return Ok(group);
         }
         catch (Exception ex) 
         {
