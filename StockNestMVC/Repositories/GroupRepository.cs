@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
 using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
-using System.Security.Claims;
 
 namespace StockNestMVC.Repositories;
 
@@ -115,5 +113,19 @@ public class GroupRepository : IGroupRepository
 
         return existingGroup.ToGroupDto();
 
+    }
+
+    public async Task<GroupDto?> DeleteGroup(int id, AppUser user)
+    {
+        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
+            .Select(ug => ug.Group)
+            .FirstOrDefaultAsync(ug => ug.GroupId == id);
+
+        if (existingGroup == null) return null;
+
+        _context.Remove(existingGroup);
+        await _context.SaveChangesAsync();
+        return existingGroup.ToGroupDto();
     }
 }

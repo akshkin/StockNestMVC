@@ -12,4 +12,6 @@ public interface IGroupRepository
     public Task<GroupDto> CreateGroup(CreateGroupDto createGroupDto, AppUser user);
 
     public Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user);
+
+    public Task<GroupDto?> DeleteGroup(int id, AppUser user);
 }

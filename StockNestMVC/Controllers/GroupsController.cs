@@ -105,4 +105,25 @@ public class GroupsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> DeleteGroup(int id) 
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null) return BadRequest("No user found");
+
+            var group = await _groupRepo.DeleteGroup(id, user);
+
+            if (group == null) return NotFound($"Group with id {id} not found");
+
+            return Ok("Successfully deleted group");
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

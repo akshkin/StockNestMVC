@@ -75,6 +75,22 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "DeleteGroup",
+    "RelativePath": "api/Groups/delete/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "UpdateGroup",
     "RelativePath": "api/Groups/edit/{id}",
     "HttpMethod": "POST",
