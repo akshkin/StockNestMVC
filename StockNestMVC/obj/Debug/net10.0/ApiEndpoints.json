@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "loginUserDto",
-        "Type": "StockNestMVC.DTOs.LoginUserDto",
+        "Type": "StockNestMVC.DTOs.User.LoginUserDto",
         "IsRequired": true
       }
     ],
@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "registerDto",
-        "Type": "StockNestMVC.DTOs.RegisterDto",
+        "Type": "StockNestMVC.DTOs.User.RegisterDto",
         "IsRequired": true
       }
     ],

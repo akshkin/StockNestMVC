@@ -1,4 +1,4 @@
-﻿using StockNestMVC.DTOs;
+﻿using StockNestMVC.DTOs.User;
 using StockNestMVC.Models;
 
 namespace StockNestMVC.Mappers;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StockNestMVC.DTOs;
+using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
 
 namespace StockNestMVC.Controllers;
