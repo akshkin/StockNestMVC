@@ -4,6 +4,8 @@ using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
+using System.Data;
+using Group = StockNestMVC.Models.Group;
 
 namespace StockNestMVC.Repositories;
 
@@ -28,7 +30,7 @@ public class GroupRepository : IGroupRepository
             throw new Exception("Group with the same name already exists");
         }
 
-        var newGroup = new Group { Name = createGroupDto.Name };
+        var newGroup = new Models.Group { Name = createGroupDto.Name };
 
         if (newGroup == null)
         {
@@ -85,7 +87,7 @@ public class GroupRepository : IGroupRepository
 
         await _context.SaveChangesAsync();
 
-        return existingGroup;
+        return existingGroup.ToGroupDto();
 
     }
 
@@ -99,7 +101,7 @@ public class GroupRepository : IGroupRepository
         return userGroups.Select(ug => ug.Group.ToGroupDto());
     }
 
-    public async Task<GroupDto?> GetGroupById(int id, AppUser user)
+    public async Task<Group?> GetGroupById(int id, AppUser user)
     {
         var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
             .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
@@ -108,7 +110,7 @@ public class GroupRepository : IGroupRepository
 
         if (existingGroup == null) return null;
 
-        return existingGroup.ToGroupDto();
+        return existingGroup;
 
     }
 
@@ -118,8 +120,60 @@ public class GroupRepository : IGroupRepository
 
         if (existingGroup == null) return null;
 
+        // check if user is the owner
+        var owner = await CheckIfUserIsOwner(id, user);
+
+        if (!owner)
+            throw new Exception("Only the group owner can delete the group");
+
         _context.Remove(existingGroup);
         await _context.SaveChangesAsync();
-        return existingGroup;
+        return existingGroup.ToGroupDto();
+    }
+
+    public async Task InviteUser(int groupId, AppUser invitedUser, string role,  AppUser user)
+    {
+        // Check if group exists
+        var group = await _context.Groups.FindAsync(groupId);
+        if (group == null)
+            throw new Exception("Group not found");
+
+        // Check if inviter is Owner
+        var inviterMember = await CheckIfUserIsOwner(groupId, user);
+
+        if (!inviterMember)
+            throw new Exception("Only the group owner can invite users");
+
+       
+        //  Check if already in group
+        var alreadyMember = await _context.UserGroup
+            .AnyAsync(ug => ug.GroupId == groupId && ug.UserId == invitedUser.Id);
+
+        if (alreadyMember)
+            throw new Exception("User is already a member of this group");
+
+        // Add to group
+        var newMembership = new UserGroup
+        {
+            UserId = invitedUser.Id,
+            GroupId = groupId,
+            Role = role
+        };
+
+        await _context.UserGroup.AddAsync(newMembership);
+        await _context.SaveChangesAsync();
+
+    }
+
+    public async Task<bool> CheckIfUserIsOwner (int id, AppUser user)
+    {
+        // check if user is the owner
+        var owner = await _context.UserGroup
+           .FirstOrDefaultAsync(ug => ug.GroupId == id && ug.UserId == user.Id);
+
+        if (owner == null || owner.Role != "Owner")
+            return false;
+
+        return true;
     }
 }

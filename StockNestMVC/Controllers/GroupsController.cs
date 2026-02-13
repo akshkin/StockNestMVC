@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
+using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 
 namespace StockNestMVC.Controllers;
@@ -54,7 +55,7 @@ public class GroupsController : ControllerBase
             {
                 return NotFound($"Group with id {id} not found");
             }
-            return Ok(group);
+            return Ok(group.ToGroupDto());
         }
         catch (Exception ex) 
         {
@@ -134,5 +135,19 @@ public class GroupsController : ControllerBase
         if (user == null) return null;
 
         return user;
+    }
+
+    [HttpPost("{groupId}/invite")]
+    public async Task<IActionResult> InviteUser(int groupId, InviterDto dto)
+    {
+        var inviter = await IsUserExists();
+        if (inviter == null) return NotFound("User not found");
+
+        var invitedUser = await _userManager.FindByEmailAsync(dto.Email);
+        if (invitedUser == null) return NotFound($"Invitee with email address {dto.Email} does not exist in our database.");
+
+        await _groupRepo.InviteUser(groupId, invitedUser, dto.Role, inviter);
+
+        return Ok(new { message = "User invited successfully" });
     }
 }
