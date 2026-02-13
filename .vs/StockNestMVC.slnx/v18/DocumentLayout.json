@@ -84,7 +84,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
@@ -109,13 +109,26 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IGroupRepository.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IGroupRepository.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Interfaces\\IGroupRepository.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IGroupRepository.cs",
+              "RelativeToolTip": "StockNestMVC\\Interfaces\\IGroupRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-13T10:59:48.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "GroupsController.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Controllers\\GroupsController.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Controllers\\GroupsController.cs",
               "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Controllers\\GroupsController.cs",
               "RelativeToolTip": "StockNestMVC\\Controllers\\GroupsController.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAywEEAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-13T09:08:16.547Z",
               "EditorCaption": ""
@@ -128,22 +141,9 @@
               "RelativeDocumentMoniker": "StockNestMVC\\Repositories\\GroupRepository.cs",
               "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\GroupRepository.cs",
               "RelativeToolTip": "StockNestMVC\\Repositories\\GroupRepository.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAAABEAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAgwGEAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-13T09:10:37.668Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IGroupRepository.cs",
-              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IGroupRepository.cs",
-              "RelativeDocumentMoniker": "StockNestMVC\\Interfaces\\IGroupRepository.cs",
-              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IGroupRepository.cs",
-              "RelativeToolTip": "StockNestMVC\\Interfaces\\IGroupRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T10:59:48.488Z",
               "EditorCaption": ""
             },
             {
@@ -156,8 +156,7 @@
               "RelativeToolTip": "..\\ASPSTOCKAPP\\ASPSTOCKAPP\\Repository\\StockRepository.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T11:14:37.747Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-13T11:14:37.747Z"
             },
             {
               "$type": "Document",
@@ -169,8 +168,7 @@
               "RelativeToolTip": "StockNestMVC\\Models\\UserGroup.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T09:47:35.059Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-13T09:47:35.059Z"
             },
             {
               "$type": "Document",

@@ -33,6 +33,16 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "GetAllGroups",
+    "RelativePath": "api/Groups",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "CreateGroup",
     "RelativePath": "api/Groups/create",
     "HttpMethod": "POST",

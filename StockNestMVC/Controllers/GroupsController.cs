@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
-using System.Security.Claims;
 
 namespace StockNestMVC.Controllers;
 
@@ -23,16 +22,29 @@ public class GroupsController : ControllerBase
         _groupRepo = groupRepo;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllGroups()
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null) return BadRequest("No user found");
+            var groups = await _groupRepo.GetAllUserGroups(user);
+            return Ok(groups);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("create")]
     public async Task<IActionResult> CreateGroup(CreateGroupDto createGroupDto)
     {
         try
         {
             var user = await _userManager.GetUserAsync(User);
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine("UserId claim: " + id);
-            Console.WriteLine(User.Identity.IsAuthenticated);
-            Console.WriteLine(user.Email);
 
             if (user == null) return BadRequest("No user found");
 

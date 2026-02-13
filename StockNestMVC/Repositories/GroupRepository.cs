@@ -89,4 +89,14 @@ public class GroupRepository : IGroupRepository
         return existingGroup.ToGroupDto();
 
     }
+
+    public async Task<IEnumerable<GroupDto>> GetAllUserGroups(AppUser user)
+    {
+        var userGroups = await _context.UserGroup
+            .Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id)
+            .ToListAsync();
+
+        return userGroups.Select(ug => ug.Group.ToGroupDto());
+    }
 }
