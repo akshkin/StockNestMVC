@@ -235,5 +235,15 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.ItemsController",
+    "Method": "Index",
+    "RelativePath": "api/Items",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]
