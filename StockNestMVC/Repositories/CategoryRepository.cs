@@ -22,8 +22,6 @@ public class CategoryRepository : ICategoryRepository
     {
         var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
 
-        Console.WriteLine("userRole", userRole);
-
         if (userRole != "Owner") throw new Exception("Only owners can create categories");
 
         var duplicate = await _context.Categories
@@ -80,6 +78,10 @@ public class CategoryRepository : ICategoryRepository
 
         if (category == null) return null;
 
+        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
+
+        if (userRole == "Viewer") throw new Exception("You do not have permission to update categories");
+
         var duplicate = await _context.Categories
            .AnyAsync(c => 
            c.GroupId == groupId && 
@@ -105,7 +107,7 @@ public class CategoryRepository : ICategoryRepository
         if (membership.Role != "Owner")
             throw new Exception("Only owners can delete a category");
 
-        var category = await _context.Categories.Include(c => c.Items)
+        var category = await _context.Categories
             .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
 
         if (category == null) return null;

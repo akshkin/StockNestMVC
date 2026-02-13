@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Category;
 using StockNestMVC.Interfaces;
@@ -6,8 +7,10 @@ using StockNestMVC.Models;
 
 namespace StockNestMVC.Controllers;
 
+
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryRepository _categoryRepo;
