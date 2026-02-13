@@ -33,4 +33,14 @@ public class AccountController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserDto loginUserDto)
+    { 
+        var userWithToken = await _accountService.Login(loginUserDto);
+
+        if (userWithToken == null) return BadRequest("Invalid email or password");
+
+        return Ok(userWithToken);
+    }
 }

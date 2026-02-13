@@ -10,11 +10,13 @@ public class AccountService : IAccountService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountService(UserManager<AppUser> userManager, ITokenService tokenService)
+    public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _tokenService = tokenService;
+        _signInManager = signInManager;
     }
 
     public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto)
@@ -45,5 +47,22 @@ public class AccountService : IAccountService
         {
             throw new Exception(ex.Message);
         }
+    }
+
+    public async Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(loginUserDto.Email);
+
+        if (existingUser == null) return null;
+
+        var passwordConfirmed = await _signInManager.CheckPasswordSignInAsync(existingUser, loginUserDto.Password, false);
+
+        if (!passwordConfirmed.Succeeded) return null;
+
+        return new UserWithTokenDto
+        {
+            User = existingUser.ToUserDto(),
+            Token = await _tokenService.CreateToken(existingUser)
+        };
     }
 }
