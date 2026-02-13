@@ -73,4 +73,24 @@ public class CategoryRepository : ICategoryRepository
 
         return category.ToCategoryDto();
     }
+
+    public async Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto)
+    {
+        var category = await GetCategoryById(groupId, categoryId, user);
+
+        if (category == null) return null;
+
+        var duplicate = await _context.Categories
+           .AnyAsync(c => 
+           c.GroupId == groupId && 
+           c.Name == updateCategoryDto.Name && 
+           c.CategoryId != categoryId);
+
+        if (duplicate)
+            throw new Exception("A category with this name already exists in the group");
+
+        category.Name = updateCategoryDto.Name;
+        await _context.SaveChangesAsync();
+        return category;
+    }
 }

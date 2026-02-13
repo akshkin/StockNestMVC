@@ -58,6 +58,28 @@ public class CategoriesController : ControllerBase
         }
     }
 
+    [HttpPost("edit/{groupId}/category/{categoryId}")]
+    public async Task<IActionResult> UpdateCategory(int groupId, int categoryId, CreateCategoryDto updateCategoryDto)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var category = await _categoryRepo.UpdateCategory(groupId, categoryId, user, updateCategoryDto);
+
+            if (category == null) return NotFound($"Category with id {categoryId} not found");
+
+            return Ok(category);
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("create/{groupId}")]
     public async Task<IActionResult> CreateCategory(int groupId, CreateCategoryDto createCategoryDto)
     {

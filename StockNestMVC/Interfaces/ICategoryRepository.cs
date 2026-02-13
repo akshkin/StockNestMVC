@@ -10,4 +10,7 @@ public interface ICategoryRepository
     public Task<CategoryDto?> GetCategoryById(int groupId, int categoryId, AppUser user);
 
     public Task<CategoryDto> CreateCategory(int groupId, AppUser user, CreateCategoryDto createCategoryDto);
+
+    public Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto);
+
 }
