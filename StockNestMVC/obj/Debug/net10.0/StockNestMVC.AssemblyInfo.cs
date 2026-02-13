@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StockNestMVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad2b4cc80018058fc135b1836ca722069d1e6c23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+be9cd0a68bbe0298aae2c9865b9e6de7ab8996ca")]
 [assembly: System.Reflection.AssemblyProductAttribute("StockNestMVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StockNestMVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

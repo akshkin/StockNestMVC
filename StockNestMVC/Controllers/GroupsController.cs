@@ -27,7 +27,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await IsUserExists();
 
             if (user == null) return BadRequest("No user found");
             var groups = await _groupRepo.GetAllUserGroups(user);
@@ -44,7 +44,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await IsUserExists();
 
             if (user == null) return BadRequest("No user found");
 
@@ -67,7 +67,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await IsUserExists();
 
             if (user == null) return BadRequest("No user found");
 
@@ -90,7 +90,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await IsUserExists();
            
             if (user == null) return BadRequest("No user found");
 
@@ -111,7 +111,7 @@ public class GroupsController : ControllerBase
     {
         try
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await IsUserExists();
 
             if (user == null) return BadRequest("No user found");
 
@@ -125,5 +125,14 @@ public class GroupsController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    private async Task<AppUser?> IsUserExists()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null) return null;
+
+        return user;
     }
 }
