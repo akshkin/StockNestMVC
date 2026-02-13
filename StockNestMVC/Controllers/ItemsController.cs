@@ -21,6 +21,25 @@ public class ItemsController : ControllerBase
         _userManager = userManager;
     }
 
+    [HttpGet("group/{groupId}/category/{categoryId}")]
+    public async Task<IActionResult> GetAllItems(int groupId, int categoryId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var items = await _itemRepo.GetAll(groupId, categoryId, user);
+
+            return Ok(items);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost("group/{groupId}/category/{categoryId}/create")]
     public async Task<IActionResult> CreateItem(int groupId, int categoryId, CreateItemDto createItemDto )
     {

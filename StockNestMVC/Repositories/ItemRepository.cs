@@ -23,6 +23,7 @@ public class ItemRepository : IItemRepository
     public async Task<ItemDto> CreateItem(int groupId, int categoryId, AppUser user, CreateItemDto createItemDto)
     {
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        if (category == null) throw new Exception("Category not found");
 
         var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
 
@@ -37,7 +38,6 @@ public class ItemRepository : IItemRepository
         if (duplicate)
             throw new Exception("A category with this name already exists in the group");
 
-        if (category == null) throw new Exception("Category not found");
 
         var item = new Item
         {
@@ -51,5 +51,16 @@ public class ItemRepository : IItemRepository
         await _context.SaveChangesAsync();
 
         return item.ToItemDto();
+    }
+
+    public async Task<IEnumerable<ItemDto>> GetAll(int groupId, int categoryId, AppUser user)
+    {
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+
+        if (category == null) throw new Exception("Category not found");
+
+        var items = await _context.Items.Where(i => i.CategoryId == categoryId).ToListAsync();
+
+        return items.Select(i => i.ToItemDto());
     }
 }
