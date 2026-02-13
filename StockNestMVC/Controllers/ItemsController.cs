@@ -59,6 +59,29 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [HttpGet("group/{groupId}/category/{categoryId}/item/{itemId}")]
+    public async Task<IActionResult> GetItemById(int groupId, int categoryId, int itemId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var item = await _itemRepo.GetItemById(groupId, categoryId, itemId, user);
+
+            if (item == null) return NotFound("Item not found");
+
+            return Ok(item);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
+
     private async Task<AppUser?> IsUserExists()
     {
         var user = await _userManager.GetUserAsync(User);

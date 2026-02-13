@@ -63,4 +63,18 @@ public class ItemRepository : IItemRepository
 
         return items.Select(i => i.ToItemDto());
     }
+
+    public async Task<ItemDto?> GetItemById(int groupId, int categoryId, int itemIid, AppUser user)
+    {
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+
+        if (category == null) throw new Exception("Category not found");
+
+        var item = await _context.Items
+            .FirstOrDefaultAsync(i => i.CategoryId == categoryId && i.ItemId == itemIid);
+
+        if (item == null) throw new Exception($"Item with id {itemIid} not found");
+
+        return item.ToItemDto();
+    }
 }
