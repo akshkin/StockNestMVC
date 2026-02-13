@@ -3,8 +3,6 @@
 // a join table for many-to-many relationship
 public class UserGroup
 {
-    public int UserGroupId { get; set; }
-
     public string UserId { get; set; }
     public AppUser AppUser { get; set; }
 

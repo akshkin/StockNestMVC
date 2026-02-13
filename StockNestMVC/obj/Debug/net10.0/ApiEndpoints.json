@@ -30,5 +30,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "CreateGroup",
+    "RelativePath": "api/Groups/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createGroupDto",
+        "Type": "StockNestMVC.DTOs.Group.CreateGroupDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

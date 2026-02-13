@@ -17,6 +17,9 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
     public DbSet<Item> Items { get; set; }
 
+    // name is UserGroup as that is how it got saved in the database
+    public DbSet<UserGroup> UserGroup { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

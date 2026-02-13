@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using StockNestMVC.Data;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
+using StockNestMVC.Repositories;
 using StockNestMVC.Services;
 using System.Security.Claims;
 
@@ -55,6 +56,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAccountService,  AccountService>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 
 var app = builder.Build();
 
