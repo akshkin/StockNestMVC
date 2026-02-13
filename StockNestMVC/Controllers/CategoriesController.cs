@@ -12,10 +12,50 @@ public class CategoriesController : ControllerBase
 {
     private readonly ICategoryRepository _categoryRepo;
     private readonly UserManager<AppUser> _userManager;
-public CategoriesController(ICategoryRepository categoryRepo, UserManager<AppUser> userManager)
+    public CategoriesController(ICategoryRepository categoryRepo, UserManager<AppUser> userManager)
     {
         _categoryRepo = categoryRepo;
         _userManager = userManager;
+    }
+
+    [HttpGet("{groupId}")]
+    public async Task<IActionResult> GetAllCategoriesInGroup(int groupId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized("User not found");
+
+            var categories = await _categoryRepo.GetCategoriesInGroup(groupId, user);
+
+            return Ok(categories);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("{groupId}/category/{categoryId}")]
+    public async Task<IActionResult> GetCategoryById(int groupId, int categoryId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+
+            if (category == null) return NotFound($"Category with id {categoryId} not found");
+
+            return Ok(category);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("create/{groupId}")]
@@ -24,7 +64,7 @@ public CategoriesController(ICategoryRepository categoryRepo, UserManager<AppUse
         try
         {
             var user = await IsUserExists();
-            if (user == null) return BadRequest("No user found");
+            if (user == null) return Unauthorized("No user found");
 
             var category = await _categoryRepo.CreateCategory(groupId, user, createCategoryDto);
             return Ok(category);

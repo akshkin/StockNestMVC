@@ -43,4 +43,34 @@ public class CategoryRepository : ICategoryRepository
 
         return newCategory.ToCategoryDto();
     }
+
+    public async Task<IEnumerable<CategoryDto>> GetCategoriesInGroup(int groupId, AppUser user)
+    {
+        //  Check if user belongs to the group
+        var membership = await _context.UserGroup
+            .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (membership == null)
+            throw new Exception("You are not a member of this group");
+
+        var categories = await _context.Categories.Where(c => c.GroupId == groupId).ToListAsync();
+
+        return categories.Select(c => c.ToCategoryDto());
+    }
+
+    public async Task<CategoryDto?> GetCategoryById(int groupId, int categoryId, AppUser user)
+    {
+        var membership = await _context.UserGroup
+           .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (membership == null)
+            throw new Exception("You are not a member of this group");
+
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
+
+        if (category == null) return null;
+
+        return category.ToCategoryDto();
+    }
 }
