@@ -1,15 +1,16 @@
 ﻿using StockNestMVC.DTOs.Category;
+using StockNestMVC.Models;
 
 namespace StockNestMVC.Mappers;
 
 public static class CategoryMapper
 {
-    public static CategoryDto ToCategoryDto(this CategoryDto categoryDto)
+    public static CategoryDto ToCategoryDto(this Category category)
     {
         return new CategoryDto
         {
-            CategoryId = categoryDto.CategoryId,
-            Name = categoryDto.Name,
+            CategoryId = category.CategoryId,
+            Name = category.Name,
         };
     }
 }

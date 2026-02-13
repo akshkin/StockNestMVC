@@ -16,4 +16,6 @@ public interface IGroupRepository
     public Task<GroupDto?> DeleteGroup(int id, AppUser user);
 
     public Task InviteUser(int groupId, AppUser invitedUser, string role, AppUser user);
+
+    public Task<string> GetRoleInGroup(int id, AppUser user);
 }
