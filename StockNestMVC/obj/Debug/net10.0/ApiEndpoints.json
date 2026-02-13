@@ -46,5 +46,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "UpdateGroup",
+    "RelativePath": "api/Groups/edit/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateGroupDto",
+        "Type": "StockNestMVC.DTOs.Group.CreateGroupDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

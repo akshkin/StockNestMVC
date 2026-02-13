@@ -49,4 +49,23 @@ public class GroupsController : ControllerBase
         
 
     }
+
+    [HttpPost("edit/{id}")]
+    public async Task<IActionResult> UpdateGroup(int id, CreateGroupDto updateGroupDto)
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+           
+            if (user == null) return BadRequest("No user found");
+
+            var updatedGroup = await _groupRepo.UpdateGroup(id, updateGroupDto, user);
+
+            return Ok(updatedGroup);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

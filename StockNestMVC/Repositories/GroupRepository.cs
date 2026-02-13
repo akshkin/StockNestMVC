@@ -12,12 +12,10 @@ namespace StockNestMVC.Repositories;
 public class GroupRepository : IGroupRepository
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<AppUser> _userManager;
 
-    public GroupRepository(ApplicationDbContext context, UserManager<AppUser> userManager)
+    public GroupRepository(ApplicationDbContext context)
     {
         _context = context;
-        _userManager = userManager;
     }
 
     public async Task<GroupDto> CreateGroup(CreateGroupDto createGroupDto, AppUser user)
@@ -60,5 +58,35 @@ public class GroupRepository : IGroupRepository
         await _context.SaveChangesAsync();
 
         return newGroup.ToGroupDto();
+    }
+
+    public async Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user)
+    {
+        var existingGroup = await _context.Groups.FirstOrDefaultAsync(ug => ug.GroupId == id);
+        if (existingGroup == null)
+        {
+            throw new Exception($"Group with id {id} not found");
+        }
+
+        // find duplicate but allow to update the current group with the
+        // same name in case request is sent with the same name
+        var duplicate = await _context.UserGroup
+            .Include(ug => ug.Group)
+            .AnyAsync(g => 
+                g.UserId == user.Id && 
+                g.Group.Name == updateGroupDto.Name && 
+                g.GroupId != id);
+
+        if (duplicate)
+        {
+            throw new Exception("Group with the same name already exists");
+        }
+
+        existingGroup.Name = updateGroupDto.Name;
+
+        await _context.SaveChangesAsync();
+
+        return existingGroup.ToGroupDto();
+
     }
 }
