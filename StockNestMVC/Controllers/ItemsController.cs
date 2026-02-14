@@ -80,6 +80,27 @@ public class ItemsController : ControllerBase
         }
     }
 
+    [HttpPost("group/{groupId}/category/{categoryId}/item/{itemId}/edit")]
+    public async Task<IActionResult> UpdateItem(int groupId, int categoryId, int itemId, CreateItemDto updateItemDto)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var item = await _itemRepo.UpdateItem(groupId, categoryId, itemId, user, updateItemDto);
+
+            if (item == null) return NotFound("Item not found");
+
+            return Ok(item);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
 
 
     private async Task<AppUser?> IsUserExists()

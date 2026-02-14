@@ -10,4 +10,6 @@ public interface IItemRepository
 
     public Task<ItemDto?> GetItemById(int groupId, int categoryId, int itemIid, AppUser user);
 
+    public Task<ItemDto?> UpdateItem(int groupId, int categoryId, int itemId, AppUser user, CreateItemDto updateItemDto);
+
 }
