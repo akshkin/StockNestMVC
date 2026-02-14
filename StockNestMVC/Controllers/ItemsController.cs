@@ -111,4 +111,23 @@ public class ItemsController : ControllerBase
 
         return user;
     }
+
+    [HttpPost("group/{groupId}/category/{categoryId}/item/{itemId}/delete")]
+    public async Task<IActionResult> DeleteItem(int groupId, int categoryId, int itemId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return Unauthorized();
+
+            var item = await _itemRepo.DeleteItem(groupId, categoryId, itemId, user);
+            if (item == null) return NotFound("Item not found");
+            return Ok("Successfully deleted item!");
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

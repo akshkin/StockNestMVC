@@ -12,4 +12,6 @@ public interface IItemRepository
 
     public Task<ItemDto?> UpdateItem(int groupId, int categoryId, int itemId, AppUser user, CreateItemDto updateItemDto);
 
+    public Task<ItemDto?> DeleteItem(int groupId, int categoryId, int itemId, AppUser user);
+
 }
