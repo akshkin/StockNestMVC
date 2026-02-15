@@ -21,7 +21,7 @@ public class CategoriesController : ControllerBase
         _userManager = userManager;
     }
 
-    [HttpGet("{groupId}")]
+    [HttpGet("group/{groupId}")]
     public async Task<IActionResult> GetAllCategoriesInGroup(int groupId)
     {
         try
@@ -40,7 +40,7 @@ public class CategoriesController : ControllerBase
         }
     }
 
-    [HttpGet("{groupId}/category/{categoryId}")]
+    [HttpGet("group/{groupId}/category/{categoryId}")]
     public async Task<IActionResult> GetCategoryById(int groupId, int categoryId)
     {
         try
@@ -61,7 +61,7 @@ public class CategoriesController : ControllerBase
         }
     }
 
-    [HttpPost("edit/{groupId}/category/{categoryId}")]
+    [HttpPost("group/{groupId}/category/{categoryId}/edit")]
     public async Task<IActionResult> UpdateCategory(int groupId, int categoryId, CreateCategoryDto updateCategoryDto)
     {
         try
@@ -83,7 +83,7 @@ public class CategoriesController : ControllerBase
         }
     }
 
-    [HttpPost("create/{groupId}")]
+    [HttpPost("group/{groupId}/create")]
     public async Task<IActionResult> CreateCategory(int groupId, CreateCategoryDto createCategoryDto)
     {
         try
@@ -100,7 +100,7 @@ public class CategoriesController : ControllerBase
         }
     }
 
-    [HttpPost("delete/{groupId}/category/{categoryId}")]
+    [HttpPost("group/{groupId}/category/{categoryId}/delete")]
     public async Task<IActionResult> DeleteCategory(int groupId, int categoryId)
     {
         try

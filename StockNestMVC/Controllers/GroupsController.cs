@@ -86,7 +86,7 @@ public class GroupsController : ControllerBase
 
     }
 
-    [HttpPost("edit/{id}")]
+    [HttpPost("{id}/edit")]
     public async Task<IActionResult> UpdateGroup(int id, CreateGroupDto updateGroupDto)
     {
         try
@@ -107,7 +107,7 @@ public class GroupsController : ControllerBase
         }
     }
 
-    [HttpPost("delete/{id}")]
+    [HttpPost("{id}/delete")]
     public async Task<IActionResult> DeleteGroup(int id) 
     {
         try
