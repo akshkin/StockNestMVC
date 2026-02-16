@@ -178,7 +178,7 @@ public class GroupRepository : IGroupRepository
         var appUser = await _context.UserGroup
            .FirstOrDefaultAsync(ug => ug.GroupId == id && ug.UserId == user.Id);
 
-        if (appUser == null || appUser.Role != "Owner")
+        if (appUser == null)
             return null;
 
         return appUser.Role;
