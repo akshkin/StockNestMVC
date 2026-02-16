@@ -34,7 +34,7 @@
   {
     "ContainingType": "StockNestMVC.Controllers.CategoriesController",
     "Method": "GetAllCategoriesInGroup",
-    "RelativePath": "api/Categories/{groupId}",
+    "RelativePath": "api/Categories/group/{groupId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -50,7 +50,7 @@
   {
     "ContainingType": "StockNestMVC.Controllers.CategoriesController",
     "Method": "GetCategoryById",
-    "RelativePath": "api/Categories/{groupId}/category/{categoryId}",
+    "RelativePath": "api/Categories/group/{groupId}/category/{categoryId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -70,29 +70,8 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.CategoriesController",
-    "Method": "CreateCategory",
-    "RelativePath": "api/Categories/create/{groupId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "groupId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "createCategoryDto",
-        "Type": "StockNestMVC.DTOs.Category.CreateCategoryDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "StockNestMVC.Controllers.CategoriesController",
     "Method": "DeleteCategory",
-    "RelativePath": "api/Categories/delete/{groupId}/category/{categoryId}",
+    "RelativePath": "api/Categories/group/{groupId}/category/{categoryId}/delete",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -113,7 +92,7 @@
   {
     "ContainingType": "StockNestMVC.Controllers.CategoriesController",
     "Method": "UpdateCategory",
-    "RelativePath": "api/Categories/edit/{groupId}/category/{categoryId}",
+    "RelativePath": "api/Categories/group/{groupId}/category/{categoryId}/edit",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -130,6 +109,27 @@
       },
       {
         "Name": "updateCategoryDto",
+        "Type": "StockNestMVC.DTOs.Category.CreateCategoryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.CategoriesController",
+    "Method": "CreateCategory",
+    "RelativePath": "api/Categories/group/{groupId}/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "createCategoryDto",
         "Type": "StockNestMVC.DTOs.Category.CreateCategoryDto",
         "IsRequired": true
       }
@@ -185,24 +185,8 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
-    "Method": "CreateGroup",
-    "RelativePath": "api/Groups/create",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createGroupDto",
-        "Type": "StockNestMVC.DTOs.Group.CreateGroupDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "DeleteGroup",
-    "RelativePath": "api/Groups/delete/{id}",
+    "RelativePath": "api/Groups/{id}/delete",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -218,7 +202,7 @@
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "UpdateGroup",
-    "RelativePath": "api/Groups/edit/{id}",
+    "RelativePath": "api/Groups/{id}/edit",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -230,6 +214,22 @@
       },
       {
         "Name": "updateGroupDto",
+        "Type": "StockNestMVC.DTOs.Group.CreateGroupDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "CreateGroup",
+    "RelativePath": "api/Groups/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createGroupDto",
         "Type": "StockNestMVC.DTOs.Group.CreateGroupDto",
         "IsRequired": true
       }
