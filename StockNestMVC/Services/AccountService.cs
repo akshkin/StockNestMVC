@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using StockNestMVC.DTOs;
+using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;

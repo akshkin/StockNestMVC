@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StockNestMVC.DTOs;
+namespace StockNestMVC.DTOs.User;
 
 public class RegisterDto
 {

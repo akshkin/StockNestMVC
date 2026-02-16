@@ -1,4 +1,4 @@
-﻿namespace StockNestMVC.DTOs;
+﻿namespace StockNestMVC.DTOs.User;
 
 public class LoginUserDto
 {

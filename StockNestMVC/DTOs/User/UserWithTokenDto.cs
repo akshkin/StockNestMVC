@@ -1,6 +1,6 @@
 ﻿using StockNestMVC.Models;
 
-namespace StockNestMVC.DTOs;
+namespace StockNestMVC.DTOs.User;
 
 public class UserWithTokenDto
 {
