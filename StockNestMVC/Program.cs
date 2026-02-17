@@ -52,13 +52,38 @@ builder.Services.AddAuthentication(options =>
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
         RoleClaimType = ClaimTypes.Role //add role to the token for role based authorization
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            context.Token = context.Request.Cookies["accessToken"];
+            return Task.CompletedTask;
+        }
+    };
 });
+
+
+
+//builder.Services.AddAuthentication("Bearer")
+//    .AddJwtBearer("Bearer", options =>
+//    {
+//        options.Events = new JwtBearerEvents
+//        {
+//            OnMessageReceived = context =>
+//            {
+//                context.Token = context.Request.Cookies["accessToken"];
+//                return Task.CompletedTask;
+//            }
+//        };
+//    });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAccountService,  AccountService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddCors(options =>
 {
@@ -66,8 +91,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
-              .AllowAnyMethod();
-              //.AllowCredentials();  // needed if using cookies
+              .AllowAnyMethod()
+              .AllowCredentials();  // needed if using cookies
     });
 });
 
