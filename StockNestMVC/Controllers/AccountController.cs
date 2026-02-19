@@ -75,8 +75,6 @@ public class AccountController : ControllerBase
 
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
-        Console.WriteLine("user with refresh", refreshToken);
-
         if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
             return Unauthorized("Invalid or expired refresh token");
 

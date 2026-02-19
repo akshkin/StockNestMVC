@@ -18,4 +18,8 @@ public interface IGroupRepository
     public Task InviteUser(int groupId, AppUser invitedUser, string role, AppUser user);
 
     public Task<string> GetRoleInGroup(int id, AppUser user);
+
+    public Task<GroupMemberResponseDto> GetGroupMembers(int groupId, AppUser user);
+
+    public Task RemoveGroupMember(int groupId, AppUser owner, AppUser member);
 }

@@ -14,4 +14,16 @@ public static class GroupMapper
             Role = role
         };
     }
+
+    public static GroupMemberDto ToGroupMemberDto(this AppUser user, string role, bool isMe)
+    {
+        return new GroupMemberDto
+        {
+            UserId = user.Id,
+            FullName = user.FullName,
+            Role = role,
+            Email = user.Email,
+            IsMe = isMe
+        };
+    }
 }

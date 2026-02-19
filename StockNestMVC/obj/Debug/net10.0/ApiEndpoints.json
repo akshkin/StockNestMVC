@@ -168,6 +168,27 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "RemoveGroupMember",
+    "RelativePath": "api/Groups/{groupId}/deleteMember/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "InviteUser",
     "RelativePath": "api/Groups/{groupId}/invite",
     "HttpMethod": "POST",
@@ -182,6 +203,22 @@
       {
         "Name": "dto",
         "Type": "StockNestMVC.DTOs.Group.InviterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "GetGroupMembers",
+    "RelativePath": "api/Groups/{groupId}/members",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
