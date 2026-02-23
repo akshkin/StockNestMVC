@@ -92,6 +92,8 @@ public class AccountController : ControllerBase
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
             if (user != null) 
             {
+                user.RefreshToken = null;
+                user.RefreshTokenExpiryTime = DateTime.MinValue;
                 await _accountService.RemoveRefreshToken(user);
                 await _userManager.UpdateAsync(user);
             }
@@ -108,6 +110,9 @@ public class AccountController : ControllerBase
         var authResponse = await _accountService.GenRefreshToken(user);
         var newAccessToken = authResponse.AccessToken;
         var newRefreshToken = authResponse.RefreshToken;
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
 
         await _userManager.UpdateAsync(user);
 

@@ -342,9 +342,9 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.ItemsController",
-    "Method": "GetItemById",
-    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}",
-    "HttpMethod": "GET",
+    "Method": "DeleteItem",
+    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/delete",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -359,8 +359,8 @@
         "IsRequired": true
       },
       {
-        "Name": "itemId",
-        "Type": "System.Int32",
+        "Name": "itemIds",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": true
       }
     ],
@@ -368,9 +368,9 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.ItemsController",
-    "Method": "DeleteItem",
-    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}/delete",
-    "HttpMethod": "POST",
+    "Method": "GetItemById",
+    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

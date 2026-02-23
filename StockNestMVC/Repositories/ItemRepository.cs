@@ -109,24 +109,22 @@ public class ItemRepository : IItemRepository
         return existingItem.ToItemDto();
     }
 
-    public async Task<ItemDto?> DeleteItem(int groupId, int categoryId, int itemId, AppUser user)
+    public async Task<IEnumerable<ItemDto?>> DeleteItem(int groupId, int categoryId, List<int> itemIds, AppUser user)
     {
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
 
         if (category == null) throw new Exception("Category not found");
 
-        var existingItem = await _context.Items
-            .FirstOrDefaultAsync(i => i.CategoryId == categoryId && i.ItemId == itemId);
 
-        if (existingItem == null) throw new Exception($"Item with id {itemId} not found");
+        var selectedItems = await _context.Items.Where(i => itemIds.Contains(i.ItemId)).ToListAsync();
 
         var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
 
         if (userRole == "Viewer") throw new Exception("You do not have the permission to delete items");
 
-        _context.Items.Remove(existingItem);
+        _context.Items.RemoveRange(selectedItems);
         await _context.SaveChangesAsync();
 
-        return existingItem.ToItemDto();
+        return selectedItems.Select(i => i.ToItemDto());
     }
 }
