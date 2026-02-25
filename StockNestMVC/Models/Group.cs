@@ -15,7 +15,7 @@ public class Group
     public string CreatedBy { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-    public string UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
 
     // users in this group with their roles
     public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();

@@ -18,7 +18,7 @@ public class Category
     public string CreatedBy { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-    public string UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
 
     public ICollection<Item> Items { get; set; } = new List<Item>();
 }

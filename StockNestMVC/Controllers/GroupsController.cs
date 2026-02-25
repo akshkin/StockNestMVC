@@ -14,12 +14,13 @@ public class GroupsController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IGroupRepository _groupRepo;
+    private readonly IGroupService _groupService;
 
-
-    public GroupsController(UserManager<AppUser> userManager, IGroupRepository groupRepo)
+    public GroupsController(UserManager<AppUser> userManager, IGroupRepository groupRepo, IGroupService groupService)
     {
         _userManager = userManager;
         _groupRepo = groupRepo;
+        _groupService = groupService;
     }
 
     [HttpGet]
@@ -30,7 +31,8 @@ public class GroupsController : ControllerBase
             var user = await IsUserExists();
 
             if (user == null) return BadRequest("No user found");
-            var groups = await _groupRepo.GetAllUserGroups(user);
+            //var groups = await _groupRepo.GetAllUserGroups(user);
+            var groups = await _groupService.GetGroups(User);
             return Ok(groups);
         }
         catch (Exception ex)
@@ -71,7 +73,7 @@ public class GroupsController : ControllerBase
 
             if (user == null) return BadRequest("No user found");
 
-            var group = await _groupRepo.CreateGroup(createGroupDto, user);
+            var group = await _groupService.CreateGroup(createGroupDto, User);
 
             if (group == null) return BadRequest("There was a problem creating the group");
 

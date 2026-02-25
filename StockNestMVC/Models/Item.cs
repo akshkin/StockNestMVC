@@ -19,7 +19,7 @@ public class Item
     public string CreatedBy { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-    public string UpdatedBy { get; set; }
+    public string? UpdatedBy { get; set; }
 
     public int CategoryId { get; set; }
     public Category Category { get; set; }
