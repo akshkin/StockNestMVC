@@ -11,11 +11,15 @@ public class Group
     [MaxLength(100, ErrorMessage = "Group name must not exceed 100 characters")]
     public string Name { get; set; }
 
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string CreatedBy { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+    public string UpdatedBy { get; set; }
+
     // users in this group with their roles
     public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
 
     public ICollection<Category> Categories { get; set; } = new List<Category>();
-
-    public ICollection<Item> Items { get; set; } = new List<Item>();
 
 }

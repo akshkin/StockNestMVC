@@ -15,8 +15,11 @@ public class Item
     [Range(0, 9999)]
     public int Quantity { get; set; }
 
-    public int GroupId { get; set; }
-    public Group Group { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string CreatedBy { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+    public string UpdatedBy { get; set; }
 
     public int CategoryId { get; set; }
     public Category Category { get; set; }

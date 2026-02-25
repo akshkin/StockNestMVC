@@ -31,7 +31,6 @@ public class ItemRepository : IItemRepository
 
         var duplicate = await _context.Items
             .AnyAsync(i => 
-                i.GroupId == groupId && 
                 i.CategoryId == categoryId && 
                 i.Name == createItemDto.Name);
 
@@ -43,7 +42,6 @@ public class ItemRepository : IItemRepository
         {
             Name = createItemDto.Name,
             Quantity = createItemDto.Quantity,
-            GroupId = groupId,
             CategoryId = categoryId,
         };
         
