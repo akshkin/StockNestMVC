@@ -30,7 +30,7 @@ public class GroupRepository : IGroupRepository
             throw new Exception("Group with the same name already exists");
         }
 
-        var newGroup = new Models.Group { Name = createGroupDto.Name };
+        var newGroup = new Models.Group { Name = createGroupDto.Name, CreatedBy = user.Id };
 
         if (newGroup == null)
         {
@@ -92,6 +92,8 @@ public class GroupRepository : IGroupRepository
         var role = await GetRoleInGroup(id, user);
 
         existingGroup.Name = updateGroupDto.Name;
+        existingGroup.UpdatedBy = user.Id;
+        existingGroup.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
@@ -240,7 +242,5 @@ public class GroupRepository : IGroupRepository
         }
         else 
             throw new Exception("Only the group owner can delete users");
-
-
     }
 }

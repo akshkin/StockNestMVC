@@ -43,6 +43,7 @@ public class ItemRepository : IItemRepository
             Name = createItemDto.Name,
             Quantity = createItemDto.Quantity,
             CategoryId = categoryId,
+            CreatedBy = user.Id
         };
         
         await _context.Items.AddAsync(item);
@@ -102,6 +103,8 @@ public class ItemRepository : IItemRepository
 
         existingItem.Name = updateItemDto.Name;
         existingItem.Quantity = updateItemDto.Quantity;
+        existingItem.UpdatedAt = DateTime.UtcNow;
+        existingItem.UpdatedBy = user.Id;
 
         await _context.SaveChangesAsync();
         return existingItem.ToItemDto();

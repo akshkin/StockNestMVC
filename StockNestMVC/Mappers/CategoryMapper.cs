@@ -11,6 +11,10 @@ public static class CategoryMapper
         {
             CategoryId = category.CategoryId,
             Name = category.Name,
+            CreatedBy = category.CreatedBy,
+            CreatedAt = category.CreatedAt,
+            UpdatedBy = category.UpdatedBy,
+            UpdatedAt = category.UpdatedAt,
         };
     }
 }

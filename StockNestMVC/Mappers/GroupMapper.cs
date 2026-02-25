@@ -11,7 +11,11 @@ public static class GroupMapper
         {
             GroupId = group.GroupId,
             Name = group.Name,
-            Role = role
+            Role = role,
+            CreatedAt = group.CreatedAt,
+            CreatedBy = group.CreatedBy,
+            UpdatedAt = group.UpdatedAt,
+            UpdatedBy = group.UpdatedBy,
         };
     }
 

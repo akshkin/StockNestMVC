@@ -432,5 +432,15 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.StatsController",
+    "Method": "GetStats",
+    "RelativePath": "api/Stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

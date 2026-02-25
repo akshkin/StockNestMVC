@@ -12,6 +12,10 @@ public static class ItemMapper
             ItemId = item.ItemId,
             Name = item.Name,
             Quantity = item.Quantity,
+            CreatedAt = item.CreatedAt,
+            CreatedBy = item.CreatedBy,
+            UpdatedAt = item.UpdatedAt,
+            UpdatedBy = item.UpdatedBy,
         };
     }
 }

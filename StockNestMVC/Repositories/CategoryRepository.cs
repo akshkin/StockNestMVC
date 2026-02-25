@@ -33,7 +33,8 @@ public class CategoryRepository : ICategoryRepository
         var newCategory = new Category 
         { 
             Name = createCategoryDto.Name,
-            GroupId = groupId
+            GroupId = groupId,
+            CreatedBy = user.Id
         };
 
         _context.Categories.Add(newCategory);
@@ -80,10 +81,10 @@ public class CategoryRepository : ICategoryRepository
         if (membership == null)
             throw new Exception("You are not a member of this group");
 
-        var category = await _context.Categories
+        var existingCategory = await _context.Categories
             .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
 
-        if (category == null) return null;
+        if (existingCategory == null) return null;
 
         var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
 
@@ -98,9 +99,12 @@ public class CategoryRepository : ICategoryRepository
         if (duplicate)
             throw new Exception("A category with this name already exists in the group");
 
-        category.Name = updateCategoryDto.Name;
+        existingCategory.Name = updateCategoryDto.Name;
+        existingCategory.UpdatedAt = DateTime.UtcNow;
+        existingCategory.UpdatedBy = user.Id;
+
         await _context.SaveChangesAsync();
-        return category.ToCategoryDto();
+        return existingCategory.ToCategoryDto();
     }
 
     public async Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user)
