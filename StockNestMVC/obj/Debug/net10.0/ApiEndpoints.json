@@ -27,6 +27,16 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.AccountController",
+    "Method": "Me",
+    "RelativePath": "api/Account/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.AccountController",
     "Method": "Refresh",
     "RelativePath": "api/Account/refresh",
     "HttpMethod": "GET",
@@ -168,6 +178,27 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "RemoveGroupMember",
+    "RelativePath": "api/Groups/{groupId}/deleteMember/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "InviteUser",
     "RelativePath": "api/Groups/{groupId}/invite",
     "HttpMethod": "POST",
@@ -182,6 +213,22 @@
       {
         "Name": "dto",
         "Type": "StockNestMVC.DTOs.Group.InviterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "GetGroupMembers",
+    "RelativePath": "api/Groups/{groupId}/members",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -305,9 +352,9 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.ItemsController",
-    "Method": "GetItemById",
-    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}",
-    "HttpMethod": "GET",
+    "Method": "DeleteItem",
+    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/delete",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -322,8 +369,8 @@
         "IsRequired": true
       },
       {
-        "Name": "itemId",
-        "Type": "System.Int32",
+        "Name": "itemIds",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": true
       }
     ],
@@ -331,9 +378,9 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.ItemsController",
-    "Method": "DeleteItem",
-    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}/delete",
-    "HttpMethod": "POST",
+    "Method": "GetItemById",
+    "RelativePath": "api/Items/group/{groupId}/category/{categoryId}/item/{itemId}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

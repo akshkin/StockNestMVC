@@ -74,7 +74,14 @@ public class CategoryRepository : ICategoryRepository
 
     public async Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto)
     {
-        var category = await GetCategoryById(groupId, categoryId, user);
+        var membership = await _context.UserGroup
+          .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (membership == null)
+            throw new Exception("You are not a member of this group");
+
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
 
         if (category == null) return null;
 
@@ -93,7 +100,7 @@ public class CategoryRepository : ICategoryRepository
 
         category.Name = updateCategoryDto.Name;
         await _context.SaveChangesAsync();
-        return category;
+        return category.ToCategoryDto();
     }
 
     public async Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user)

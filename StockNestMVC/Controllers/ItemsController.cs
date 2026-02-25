@@ -112,8 +112,8 @@ public class ItemsController : ControllerBase
         return user;
     }
 
-    [HttpPost("group/{groupId}/category/{categoryId}/item/{itemId}/delete")]
-    public async Task<IActionResult> DeleteItem(int groupId, int categoryId, int itemId)
+    [HttpPost("group/{groupId}/category/{categoryId}/delete")]
+    public async Task<IActionResult> DeleteItem(int groupId, int categoryId, List<int> itemIds)
     {
         try
         {
@@ -121,9 +121,10 @@ public class ItemsController : ControllerBase
 
             if (user == null) return Unauthorized();
 
-            var item = await _itemRepo.DeleteItem(groupId, categoryId, itemId, user);
-            if (item == null) return NotFound("Item not found");
-            return Ok("Successfully deleted item!");
+            var items = await _itemRepo.DeleteItem(groupId, categoryId, itemIds, user);
+
+            if (items == null) return NotFound("Items not found");
+            return Ok("Successfully deleted items!");
         }
         catch (Exception ex) 
         {

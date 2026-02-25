@@ -136,12 +136,15 @@ public class GroupRepository : IGroupRepository
         // check if user is the owner
         var role = await GetRoleInGroup(id, user);
 
-        if (role != "Owner")
+        if (role == "Owner" || role == "Co-Owner")
+        {
+            _context.Remove(existingGroup);
+            await _context.SaveChangesAsync();
+            return existingGroup.ToGroupDto(role);
+        }
+        else 
             throw new Exception("Only the group owner can delete the group");
 
-        _context.Remove(existingGroup);
-        await _context.SaveChangesAsync();
-        return existingGroup.ToGroupDto(role);
     }
 
     public async Task InviteUser(int groupId, AppUser invitedUser, string role,  AppUser user)
@@ -151,13 +154,6 @@ public class GroupRepository : IGroupRepository
         if (group == null)
             throw new Exception("Group not found");
 
-        // Check if inviter is Owner
-        var inviterMember = await GetRoleInGroup(groupId, user);
-
-        if (inviterMember != "Owner")
-            throw new Exception("Only the group owner can invite users");
-
-       
         //  Check if already in group
         var alreadyMember = await _context.UserGroup
             .AnyAsync(ug => ug.GroupId == groupId && ug.UserId == invitedUser.Id);
@@ -165,16 +161,24 @@ public class GroupRepository : IGroupRepository
         if (alreadyMember)
             throw new Exception("User is already a member of this group");
 
-        // Add to group
-        var newMembership = new UserGroup
-        {
-            UserId = invitedUser.Id,
-            GroupId = groupId,
-            Role = role
-        };
+        // Check if inviter is Owner
+        var inviterMember = await GetRoleInGroup(groupId, user);
 
-        await _context.UserGroup.AddAsync(newMembership);
-        await _context.SaveChangesAsync();
+        if (inviterMember == "Owner" || inviterMember == "Co-Owner")
+        {
+            // Add to group
+            var newMembership = new UserGroup
+            {
+                UserId = invitedUser.Id,
+                GroupId = groupId,
+                Role = role
+            };
+
+            await _context.UserGroup.AddAsync(newMembership);
+            await _context.SaveChangesAsync();
+        }
+        else 
+            throw new Exception("Only the group owner can invite users");     
 
     }
 
@@ -188,5 +192,55 @@ public class GroupRepository : IGroupRepository
             return null;
 
         return appUser.Role;
+    }
+
+    public async Task<GroupMemberResponseDto> GetGroupMembers(int groupId, AppUser user)
+    {
+        var userGroup = await _context.UserGroup
+          .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (userGroup == null) return null;
+
+        var members = await _context.UserGroup.Include(ug => ug.AppUser).Where(ug => ug.GroupId == groupId).ToListAsync();
+
+        string myRole = userGroup.Role;
+        var memberDto =  members.Select(m => {
+            bool isMe = m.UserId == user.Id;
+            return m.AppUser.ToGroupMemberDto(m.Role, isMe);            
+        });
+
+        var response = new GroupMemberResponseDto
+        {
+            GroupMembers = memberDto,
+            MyRole = myRole
+        };
+        return response;
+    }
+
+    public async Task RemoveGroupMember(int groupId, AppUser owner, AppUser member)
+    {
+        var group = await _context.Groups.FindAsync(groupId);
+        if (group == null)
+            throw new Exception("Group not found");
+
+        //  Check if member exists in group
+        var groupMember = await _context.UserGroup
+            .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == member.Id);
+
+        if (groupMember == null)
+            throw new Exception("User is not a member of this group");
+
+        // Check if inviter is Owner
+        var inviterMember = await GetRoleInGroup(groupId, owner);
+
+        if (inviterMember == "Owner" || inviterMember == "Co-Owner")
+        {
+            _context.UserGroup.Remove(groupMember);
+            await _context.SaveChangesAsync();
+        }
+        else 
+            throw new Exception("Only the group owner can delete users");
+
+
     }
 }

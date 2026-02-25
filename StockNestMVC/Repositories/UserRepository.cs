@@ -17,7 +17,7 @@ public class UserRepository : IUserRepository
     public async Task SaveRefreshToken(AppUser user, string newRefreshToken)
     {
         user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(1);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
         //_context.Users.Update();
         await _context.SaveChangesAsync();
     }

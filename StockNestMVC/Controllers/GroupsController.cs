@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
-using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 
 namespace StockNestMVC.Controllers;
@@ -152,6 +151,41 @@ public class GroupsController : ControllerBase
 
             return Ok(new { message = "User invited successfully" });
         } 
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("{groupId}/members")]
+    public async Task<IActionResult> GetGroupMembers(int groupId)
+    {
+        var user = await IsUserExists();
+
+        if (user == null) return NotFound("No user found");
+
+        var members = await _groupRepo.GetGroupMembers(groupId, user);
+
+        return Ok(members);
+    }
+
+    [HttpPost("{groupId}/deleteMember/{userId}")]
+    public async Task<IActionResult> RemoveGroupMember(int groupId, string userId)
+    {
+        try
+        {
+            var user = await IsUserExists();
+
+            if (user == null) return NotFound("No user found");
+
+            var member = await _userManager.FindByIdAsync(userId);
+
+            if (member == null) return NotFound("Member does not exist");
+
+            await _groupRepo.RemoveGroupMember(groupId, user, member);
+
+            return NoContent();
+        }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
