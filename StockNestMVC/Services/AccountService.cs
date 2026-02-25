@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
@@ -11,12 +12,14 @@ public class AccountService : IAccountService
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IUserRepository _userRepo;
 
-    public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+    public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IUserRepository userRepo)
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _signInManager = signInManager;
+        _userRepo = userRepo;
     }
 
     public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto)
@@ -64,5 +67,25 @@ public class AccountService : IAccountService
             User = existingUser.ToUserDto(),
             Token = await _tokenService.CreateToken(existingUser)
         };
+    }
+
+    public async Task<AuthResponseDto> GenRefreshToken(AppUser user)
+    {
+        var newAccessToken = await _tokenService.CreateToken(user);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        var authResponse = new AuthResponseDto
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken
+        };
+
+        await _userRepo.SaveRefreshToken(user, newRefreshToken);
+        return authResponse;
+    }
+
+    public async Task RemoveRefreshToken(AppUser user)
+    {
+        await _userRepo.Logout(user);
     }
 }

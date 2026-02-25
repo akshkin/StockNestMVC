@@ -16,8 +16,13 @@ public class AppUser : IdentityUser
     [MaxLength(100, ErrorMessage = "Last name cannot be more than 100 characters")]
     public string LastName { get; set; }
 
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
+
     [NotMapped]
     public string FullName => FirstName + LastName; 
     
     public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+
 }

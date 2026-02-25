@@ -62,7 +62,13 @@ public class GroupRepository : IGroupRepository
 
     public async Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user)
     {
-        var existingGroup = await GetGroupById(id, user);
+        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
+            .Select(ug => ug.Group)
+            .FirstOrDefaultAsync(ug => ug.GroupId == id);
+
+        var roleInGroup = await GetRoleInGroup(id, user);
+        //var existingGroup = await GetGroupById(id, user);
 
         if (existingGroup == null)
         {
@@ -89,7 +95,7 @@ public class GroupRepository : IGroupRepository
 
         await _context.SaveChangesAsync();
 
-        return existingGroup;
+        return existingGroup.ToGroupDto(role);
 
     }
 
