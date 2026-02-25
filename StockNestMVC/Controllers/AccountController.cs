@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StockNestMVC.DTOs;
@@ -76,13 +77,18 @@ public class AccountController : ControllerBase
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
         if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+        {
             return Unauthorized("Invalid or expired refresh token");
 
-        await GenerateTokens(user);
+        } else
+        {
+            await GenerateTokens(user);
 
-        return Ok();
+            return Ok();
+        }
     }
 
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -103,6 +109,13 @@ public class AccountController : ControllerBase
         Response.Cookies.Delete("refreshToken");
 
         return Ok("Logged out");
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new { user = User.Identity.IsAuthenticated });
     }
 
     private async Task GenerateTokens(AppUser user)
@@ -129,7 +142,7 @@ public class AccountController : ControllerBase
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddDays(1) // change later to 2 days?
+            Expires = DateTime.UtcNow.AddDays(1) // change later to 2 days?           
         });
     }
 }
