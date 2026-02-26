@@ -50,7 +50,7 @@ public class GroupsController : ControllerBase
 
             if (user == null) return BadRequest("No user found");
 
-            var group = await _groupRepo.GetGroupById(id, user);
+            var group = await _groupService.GetGroupById(id, User);
 
             if (group == null)
             {
@@ -96,7 +96,7 @@ public class GroupsController : ControllerBase
            
             if (user == null) return BadRequest("No user found");
 
-            var updatedGroup = await _groupRepo.UpdateGroup(id, updateGroupDto, user);
+            var updatedGroup = await _groupService.UpdateGroup(id, updateGroupDto, User);
 
             if (updatedGroup == null) return NotFound($"Group with id {id} not found");
 
@@ -117,7 +117,7 @@ public class GroupsController : ControllerBase
 
             if (user == null) return BadRequest("No user found");
 
-            var group = await _groupRepo.DeleteGroup(id, user);
+            var group = await _groupService.DeleteGroup(id, User);
 
             if (group == null) return NotFound($"Group with id {id} not found");
 

@@ -30,56 +30,11 @@ public class GroupRepository : IGroupRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<GroupDto?> UpdateGroup(int id, CreateGroupDto updateGroupDto, AppUser user)
+    public async Task UpdateGroup(Group group)
     {
-        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
-            .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
-            .Select(ug => ug.Group)
-            .FirstOrDefaultAsync(ug => ug.GroupId == id);
-
-        var roleInGroup = await GetRoleInGroup(id, user);
-        //var existingGroup = await GetGroupById(id, user);
-
-        if (existingGroup == null)
-        {
-            throw new Exception($"Group with id {id} not found");
-        }
-
-        // find duplicate but allow to update the current group with the
-        // same name in case request is sent with the same name
-        var duplicate = await _context.UserGroup
-            .Include(ug => ug.Group)
-            .AnyAsync(g => 
-                g.UserId == user.Id && 
-                g.Group.Name == updateGroupDto.Name && 
-                g.GroupId != id);
-
-        if (duplicate)
-        {
-            throw new Exception("Group with the same name already exists");
-        }
-
-        var role = await GetRoleInGroup(id, user);
-
-        existingGroup.Name = updateGroupDto.Name;
-        existingGroup.UpdatedBy = user.Id;
-        existingGroup.UpdatedAt = DateTime.UtcNow;
-
+        _context.Groups.Update(group);
         await _context.SaveChangesAsync();
-
-        return existingGroup.ToGroupDto(role, null, null);
-
     }
-
-    //public async Task<IEnumerable<GroupDto>> GetAllUserGroups(AppUser user)
-    //{
-    //    var userGroups = await _context.UserGroup
-    //        .Include(ug => ug.Group)
-    //        .Where(ug => ug.UserId == user.Id)
-    //        .ToListAsync();
-
-    //    return userGroups.Select(ug => ug.Group.ToGroupDto(ug.Role));
-    //}
 
     public async Task<IEnumerable<UserGroup>> GetAllUserGroups(AppUser user)
     {
@@ -91,42 +46,21 @@ public class GroupRepository : IGroupRepository
         return userGroups;
     }
 
-    public async Task<GroupDto?> GetGroupById(int id, AppUser user)
+    public async Task<Group?> GetGroupById(int id, AppUser user)
     {
         var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
             .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
             .Select(ug => ug.Group)
             .FirstOrDefaultAsync(ug => ug.GroupId == id);
 
-        var roleInGroup = await GetRoleInGroup(id, user);
-
         if (existingGroup == null) return null;
-
-        return existingGroup.ToGroupDto(roleInGroup, null, null);
+        return existingGroup;
     }
 
-    public async Task<GroupDto?> DeleteGroup(int id, AppUser user)
-    {
-        // since the get by id method returns a dto, it cannot be reused here
-        var existingGroup = await _context.UserGroup.Include(ug => ug.Group)
-             .Where(ug => ug.UserId == user.Id && ug.GroupId == id)
-             .Select(ug => ug.Group)
-             .FirstOrDefaultAsync(ug => ug.GroupId == id);
-
-        if (existingGroup == null) return null;
-
-        // check if user is the owner
-        var role = await GetRoleInGroup(id, user);
-
-        if (role == "Owner" || role == "Co-Owner")
-        {
-            _context.Remove(existingGroup);
-            await _context.SaveChangesAsync();
-            return existingGroup.ToGroupDto(role, null, null);
-        }
-        else 
-            throw new Exception("Only the group owner can delete the group");
-
+    public async Task DeleteGroup(Group group)
+    {      
+        _context.Remove(group);
+        await _context.SaveChangesAsync();
     }
 
     public async Task InviteUser(int groupId, AppUser invitedUser, string role,  AppUser user)
@@ -224,11 +158,25 @@ public class GroupRepository : IGroupRepository
             throw new Exception("Only the group owner can delete users");
     }
 
-    public async Task<bool> CheckDuplicateGroup(AppUser user, string groupName)
+    public async Task<bool> CheckDuplicateGroup(AppUser user, string groupName, int? groupId)
     {
-        var duplicate = await _context.UserGroup
-           .Include(ug => ug.Group)
-           .AnyAsync(g => g.UserId == user.Id && g.Group.Name == groupName);
+        bool duplicate;
+
+        if (groupId != null)
+        {
+            duplicate = await _context.UserGroup
+                .Include(ug => ug.Group)
+                .AnyAsync(g =>
+                    g.UserId == user.Id &&
+                    g.Group.Name == groupName &&
+                    g.GroupId != groupId);
+        }
+        else
+        {
+            duplicate = await _context.UserGroup
+               .Include(ug => ug.Group)
+               .AnyAsync(g => g.UserId == user.Id && g.Group.Name == groupName);
+        }
 
         return duplicate;
     }
