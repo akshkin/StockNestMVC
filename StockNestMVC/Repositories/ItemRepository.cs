@@ -22,7 +22,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<ItemDto> CreateItem(int groupId, int categoryId, AppUser user, CreateItemDto createItemDto)
     {
-        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
         if (category == null) throw new Exception("Category not found");
 
         var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
@@ -54,7 +54,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<IEnumerable<ItemDto>> GetAll(int groupId, int categoryId, AppUser user)
     {
-        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
         if (category == null) throw new Exception("Category not found");
 
@@ -65,7 +65,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<ItemDto?> GetItemById(int groupId, int categoryId, int itemIid, AppUser user)
     {
-        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
         if (category == null) throw new Exception("Category not found");
 
@@ -79,7 +79,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<ItemDto?> UpdateItem(int groupId, int categoryId, int itemId, AppUser user, CreateItemDto updateItemDto)
     {
-        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
         if (category == null) throw new Exception("Category not found");
 
@@ -112,7 +112,7 @@ public class ItemRepository : IItemRepository
 
     public async Task<IEnumerable<ItemDto?>> DeleteItem(int groupId, int categoryId, List<int> itemIds, AppUser user)
     {
-        var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
         if (category == null) throw new Exception("Category not found");
 

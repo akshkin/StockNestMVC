@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
-using StockNestMVC.DTOs.Category;
 using StockNestMVC.Interfaces;
-using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 
 namespace StockNestMVC.Repositories;
@@ -10,122 +8,63 @@ namespace StockNestMVC.Repositories;
 public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
-    private readonly IGroupRepository _groupRepo;
 
-    public CategoryRepository(ApplicationDbContext context, IGroupRepository groupRepo)
+    public CategoryRepository(ApplicationDbContext context)
     {
         _context = context;
-        _groupRepo = groupRepo;
     }
 
-    public async Task<CategoryDto> CreateCategory(int groupId, AppUser user, CreateCategoryDto createCategoryDto)
+    public async Task CreateCategory(Category category)
     {
-        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
-
-        if (userRole != "Owner") throw new Exception("Only owners can create categories");
-
-        var duplicate = await _context.Categories
-            .AnyAsync(c => c.GroupId == groupId && c.Name == createCategoryDto.Name);
-
-        if (duplicate)
-            throw new Exception("A category with this name already exists in the group");
-
-        var newCategory = new Category 
-        { 
-            Name = createCategoryDto.Name,
-            GroupId = groupId,
-            CreatedBy = user.Id
-        };
-
-        _context.Categories.Add(newCategory);
+        _context.Categories.Add(category);
         await _context.SaveChangesAsync();
-
-        return newCategory.ToCategoryDto();
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetCategoriesInGroup(int groupId, AppUser user)
+    public async Task<IEnumerable<Category>> GetCategoriesInGroup(int groupId)
     {
-        //  Check if user belongs to the group
-        var membership = await _context.UserGroup
-            .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
-
-        if (membership == null)
-            throw new Exception("You are not a member of this group");
-
         var categories = await _context.Categories.Where(c => c.GroupId == groupId).ToListAsync();
 
-        return categories.Select(c => c.ToCategoryDto());
+        return categories;
     }
 
-    public async Task<CategoryDto?> GetCategoryById(int groupId, int categoryId, AppUser user)
+    public async Task<Category?> GetCategoryById(int groupId, int categoryId)
     {
-        var membership = await _context.UserGroup
-           .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
-
-        if (membership == null)
-            throw new Exception("You are not a member of this group");
-
         var category = await _context.Categories
             .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
 
-        if (category == null) return null;
-
-        return category.ToCategoryDto();
+        return category;
     }
 
-    public async Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto)
+    public async Task UpdateCategory(Category category)
     {
-        var membership = await _context.UserGroup
-          .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
-
-        if (membership == null)
-            throw new Exception("You are not a member of this group");
-
-        var existingCategory = await _context.Categories
-            .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
-
-        if (existingCategory == null) return null;
-
-        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
-
-        if (userRole == "Viewer") throw new Exception("You do not have permission to update categories");
-
-        var duplicate = await _context.Categories
-           .AnyAsync(c => 
-           c.GroupId == groupId && 
-           c.Name == updateCategoryDto.Name && 
-           c.CategoryId != categoryId);
-
-        if (duplicate)
-            throw new Exception("A category with this name already exists in the group");
-
-        existingCategory.Name = updateCategoryDto.Name;
-        existingCategory.UpdatedAt = DateTime.UtcNow;
-        existingCategory.UpdatedBy = user.Id;
-
+        _context.Categories.Update(category);
         await _context.SaveChangesAsync();
-        return existingCategory.ToCategoryDto();
     }
 
-    public async Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user)
+    public async Task DeleteCategory(Category category)
     {
-        var membership = await _context.UserGroup
-           .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
-
-        if (membership == null)
-            throw new Exception("You are not a member of this group");
-
-        if (membership.Role != "Owner")
-            throw new Exception("Only owners can delete a category");
-
-        var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.CategoryId == categoryId && c.GroupId == groupId);
-
-        if (category == null) return null;
-
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
+    }
 
-        return category.ToCategoryDto();
+    public async Task<bool> CheckDuplicate(int groupId, string name, int? categoryId)
+    {
+
+        bool duplicate;
+
+        if(categoryId != null) // for update, allow duplicate if user keeps the same name for the given category
+        {
+            duplicate = await _context.Categories
+           .AnyAsync(c =>
+           c.GroupId == groupId &&
+           c.Name == name &&
+           c.CategoryId != categoryId);
+        } 
+        else // for create 
+        {
+            duplicate = await _context.Categories
+           .AnyAsync(c => c.GroupId == groupId && c.Name == name);
+        }
+        return duplicate;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Category;
 using StockNestMVC.Interfaces;
@@ -13,12 +12,10 @@ namespace StockNestMVC.Controllers;
 [Authorize]
 public class CategoriesController : ControllerBase
 {
-    private readonly ICategoryRepository _categoryRepo;
-    private readonly UserManager<AppUser> _userManager;
-    public CategoriesController(ICategoryRepository categoryRepo, UserManager<AppUser> userManager)
+    private readonly ICategoryService _categoryService;
+    public CategoriesController(ICategoryService categoryService)
     {
-        _categoryRepo = categoryRepo;
-        _userManager = userManager;
+        _categoryService = categoryService;
     }
 
     [HttpGet("group/{groupId}")]
@@ -26,11 +23,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized("User not found");
-
-            var categories = await _categoryRepo.GetCategoriesInGroup(groupId, user);
+            var categories = await _categoryService.GetCategoriesInGroup(groupId, User);
 
             return Ok(categories);
         }
@@ -45,11 +38,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var category = await _categoryRepo.GetCategoryById(groupId, categoryId, user);
+            var category = await _categoryService.GetCategoryById(groupId, categoryId, User);
 
             if (category == null) return NotFound($"Category with id {categoryId} not found");
 
@@ -66,11 +55,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var category = await _categoryRepo.UpdateCategory(groupId, categoryId, user, updateCategoryDto);
+            var category = await _categoryService.UpdateCategory(groupId, categoryId, User, updateCategoryDto);
 
             if (category == null) return NotFound($"Category with id {categoryId} not found");
 
@@ -88,10 +73,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-            if (user == null) return Unauthorized("No user found");
-
-            var category = await _categoryRepo.CreateCategory(groupId, user, createCategoryDto);
+            var category = await _categoryService.CreateCategory(groupId, User, createCategoryDto);
             return Ok(category);
         }
         catch (Exception ex)
@@ -105,10 +87,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-            if (user == null) return Unauthorized("No user found");
-
-            var category = await _categoryRepo.DeleteCategory(groupId, categoryId, user);
+            var category = await _categoryService.DeleteCategory(groupId, categoryId, User);
             if (category == null) return NotFound($"Category with id {categoryId} not found");
 
             return Ok("Successfully deleted category");
@@ -117,14 +96,5 @@ public class CategoriesController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-    }
-
-    private async Task<AppUser?> IsUserExists()
-    {
-        var user = await _userManager.GetUserAsync(User);
-
-        if (user == null) return null;
-
-        return user;
     }
 }
