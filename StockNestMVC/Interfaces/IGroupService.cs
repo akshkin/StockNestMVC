@@ -14,4 +14,12 @@ public interface IGroupService
     public Task<GroupDto?> GetGroupById(int groupId, ClaimsPrincipal claimsPrincipal);
 
     public Task<GroupDto?> DeleteGroup(int groupId, ClaimsPrincipal claimsPrincipal); 
+
+    public Task InviteGroupMember(int groupId, ClaimsPrincipal claimsPrincipal, string email, string role);
+
+    public Task<GroupMemberResponseDto> GetGroupMembers(int groupId, ClaimsPrincipal claimpsPrincipal);
+
+    public Task RemoveGroupMember(int groupId, ClaimsPrincipal claimsPrincipal, string userId);
+
+
 }

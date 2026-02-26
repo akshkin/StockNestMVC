@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
@@ -169,5 +168,100 @@ public class GroupService : IGroupService
         }
         
         return existingGroup.ToGroupDto(role, null, null);
+    }
+
+    public async Task InviteGroupMember(int groupId, ClaimsPrincipal claimsPrincipal, string email, string role)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("User not found");
+
+        var group = await _groupRepo.GetGroupById(groupId, user);
+
+        if (group == null) throw new Exception("Group not found");
+
+        var invitedUser = await _userManager.FindByEmailAsync(email);
+
+        if (invitedUser == null) throw new Exception("User with entered email address does not exist in our database");
+
+        var isAlreadyMemeber = await _groupRepo.CheckIfMemberInGroup(groupId, invitedUser);
+
+        if(isAlreadyMemeber)
+        {
+            throw new Exception("User is already  amember of this group");
+        }
+
+        var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
+
+       
+        if (roleInGroup == "Owner" || roleInGroup == "Co-Owner")
+        {
+            // Add to group
+            var newMembership = new UserGroup
+            {
+                UserId = invitedUser.Id,
+                GroupId = groupId,
+                Role = role
+            };
+            await _groupRepo.InviteUser(newMembership);
+        }
+        else
+            throw new Exception("Only the group owner can invite users");
+    }
+
+    public async Task<GroupMemberResponseDto> GetGroupMembers(int groupId, ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("User not found");
+
+        var userGroup = await _groupRepo.GetUserGroup(groupId, user);
+
+        if (userGroup == null) throw new Exception("Group not found");
+
+        var members = await _groupRepo.GetGroupMembers(groupId, user);
+
+        string myRole = userGroup.Role;
+        var memberDto = members.Select(m =>
+        {
+            bool isMe = m.UserId == user.Id;
+            return m.AppUser.ToGroupMemberDto(m.Role, isMe);
+        });
+
+        var response = new GroupMemberResponseDto
+        {
+            GroupMembers = memberDto,
+            MyRole = myRole
+        };
+        return response;
+    }
+
+    public async Task RemoveGroupMember(int groupId, ClaimsPrincipal claimsPrincipal, string userId)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("User not found");
+
+        var group = await _groupRepo.GetUserGroup(groupId, user);
+
+        if (group == null) throw new Exception("Group not found");
+
+        var member = await _userManager.FindByIdAsync(userId);
+
+        if (member == null) throw new Exception("User does not exist");
+
+        // check if user is a member of the group
+        var membership = await _groupRepo.GetUserGroup(groupId, member);
+
+        if (membership == null) throw new Exception("User is not a member of this group");
+
+        var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
+
+        if (roleInGroup == "Owner" || roleInGroup == "Co-Owner")
+        {
+            await _groupRepo.RemoveGroupMember(groupId, membership);
+        }
+        else
+            throw new Exception("Only the group owner can delete users");
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
-using StockNestMVC.DTOs.Group;
 using StockNestMVC.Interfaces;
-using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 using System.Data;
 using Group = StockNestMVC.Models.Group;
@@ -63,39 +61,10 @@ public class GroupRepository : IGroupRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task InviteUser(int groupId, AppUser invitedUser, string role,  AppUser user)
+    public async Task InviteUser(UserGroup membership)
     {
-        // Check if group exists
-        var group = await _context.Groups.FindAsync(groupId);
-        if (group == null)
-            throw new Exception("Group not found");
-
-        //  Check if already in group
-        var alreadyMember = await _context.UserGroup
-            .AnyAsync(ug => ug.GroupId == groupId && ug.UserId == invitedUser.Id);
-
-        if (alreadyMember)
-            throw new Exception("User is already a member of this group");
-
-        // Check if inviter is Owner
-        var inviterMember = await GetRoleInGroup(groupId, user);
-
-        if (inviterMember == "Owner" || inviterMember == "Co-Owner")
-        {
-            // Add to group
-            var newMembership = new UserGroup
-            {
-                UserId = invitedUser.Id,
-                GroupId = groupId,
-                Role = role
-            };
-
-            await _context.UserGroup.AddAsync(newMembership);
-            await _context.SaveChangesAsync();
-        }
-        else 
-            throw new Exception("Only the group owner can invite users");     
-
+        await _context.UserGroup.AddAsync(membership);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<string> GetRoleInGroup (int id, AppUser user)
@@ -110,52 +79,17 @@ public class GroupRepository : IGroupRepository
         return appUser.Role;
     }
 
-    public async Task<GroupMemberResponseDto> GetGroupMembers(int groupId, AppUser user)
+    public async Task<IEnumerable<UserGroup>> GetGroupMembers(int groupId, AppUser user)
     {
-        var userGroup = await _context.UserGroup
-          .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
-
-        if (userGroup == null) return null;
-
         var members = await _context.UserGroup.Include(ug => ug.AppUser).Where(ug => ug.GroupId == groupId).ToListAsync();
 
-        string myRole = userGroup.Role;
-        var memberDto =  members.Select(m => {
-            bool isMe = m.UserId == user.Id;
-            return m.AppUser.ToGroupMemberDto(m.Role, isMe);            
-        });
-
-        var response = new GroupMemberResponseDto
-        {
-            GroupMembers = memberDto,
-            MyRole = myRole
-        };
-        return response;
+        return members;
     }
 
-    public async Task RemoveGroupMember(int groupId, AppUser owner, AppUser member)
-    {
-        var group = await _context.Groups.FindAsync(groupId);
-        if (group == null)
-            throw new Exception("Group not found");
-
-        //  Check if member exists in group
-        var groupMember = await _context.UserGroup
-            .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == member.Id);
-
-        if (groupMember == null)
-            throw new Exception("User is not a member of this group");
-
-        // Check if inviter is Owner
-        var inviterMember = await GetRoleInGroup(groupId, owner);
-
-        if (inviterMember == "Owner" || inviterMember == "Co-Owner")
-        {
-            _context.UserGroup.Remove(groupMember);
-            await _context.SaveChangesAsync();
-        }
-        else 
-            throw new Exception("Only the group owner can delete users");
+    public async Task RemoveGroupMember(int groupId, UserGroup membership)
+    {        
+        _context.UserGroup.Remove(membership);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<bool> CheckDuplicateGroup(AppUser user, string groupName, int? groupId)
@@ -179,5 +113,23 @@ public class GroupRepository : IGroupRepository
         }
 
         return duplicate;
+    }
+
+    public async Task<bool> CheckIfMemberInGroup(int groupId, AppUser user)
+    {
+        var alreadyMember = await _context.UserGroup
+            .AnyAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        return alreadyMember;
+    }
+
+    public async Task<UserGroup?> GetUserGroup(int groupId, AppUser user)
+    {
+        var userGroup = await _context.UserGroup
+          .FirstOrDefaultAsync(ug => ug.GroupId == groupId && ug.UserId == user.Id);
+
+        if (userGroup == null) return null;
+
+        return userGroup;
     }
 }
