@@ -72,6 +72,9 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<UserGroupService>();
+
 
 
 builder.Services.AddCors(options =>

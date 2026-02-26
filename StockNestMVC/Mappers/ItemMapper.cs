@@ -5,7 +5,7 @@ namespace StockNestMVC.Mappers;
 
 public static class ItemMapper
 {
-    public static ItemDto ToItemDto(this Item item)
+    public static ItemDto ToItemDto(this Item item, string creator, string updator)
     {
         return new ItemDto
         {
@@ -13,9 +13,9 @@ public static class ItemMapper
             Name = item.Name,
             Quantity = item.Quantity,
             CreatedAt = item.CreatedAt,
-            CreatedBy = item.CreatedBy,
+            CreatedBy = creator,
             UpdatedAt = item.UpdatedAt,
-            UpdatedBy = item.UpdatedBy,
+            UpdatedBy = updator,
         };
     }
 }
