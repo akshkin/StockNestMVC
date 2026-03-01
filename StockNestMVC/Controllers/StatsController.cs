@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StockNestMVC.Models;
+using StockNestMVC.Interfaces;
 
 namespace StockNestMVC.Controllers;
 
@@ -10,20 +9,23 @@ namespace StockNestMVC.Controllers;
 [Authorize]
 public class StatsController : ControllerBase
 {
-
-    private readonly UserManager<AppUser> _userManager;
-
-    public StatsController(UserManager<AppUser> userManager)
+    private readonly IStatsService _statsService;
+    public StatsController(IStatsService statsService)
     {
-        _userManager = userManager;
+        _statsService = statsService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetStats()
     {
-        var user = await _userManager.GetUserAsync(User);
-
-        if (user == null) return null;
-        return Ok();
+        try
+        {
+            var stats = await _statsService.GetGroupStats(User);
+            return Ok(stats);
+        }
+        catch (Exception ex) 
+        {
+                return BadRequest(ex.Message);
+        }
     }
 }
