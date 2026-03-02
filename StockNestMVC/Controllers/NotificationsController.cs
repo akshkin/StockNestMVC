@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.Interfaces;
+using System.Drawing;
 
 namespace StockNestMVC.Controllers;
 
@@ -17,11 +18,11 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllNotifications()
+    public async Task<IActionResult> GetAllNotifications(int page = 1, int size = 10)
     {
         try
         {
-            var notifications = await _notificationService.GetAllNotifications(User);
+            var notifications = await _notificationService.GetAllNotifications(User, page, size);
 
             return Ok(notifications);
         }
@@ -32,11 +33,11 @@ public class NotificationsController : ControllerBase
     }
 
     [HttpGet("unread")]
-    public async Task<IActionResult> GetUnreadNotifications()
+    public async Task<IActionResult> GetUnreadNotifications(int page = 1, int size = 10)
     {
         try
         {
-            var unreadNotifications = await _notificationService.GetUnreadNotifications(User);
+            var unreadNotifications = await _notificationService.GetUnreadNotifications(User, page, size);
             return Ok(unreadNotifications);
         }
         catch (Exception ex)

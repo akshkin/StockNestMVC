@@ -7,9 +7,9 @@ public interface INotificationRepository
 {
     public Task NotifyGroupMembers(int groupId, string actingUserId, string message, NotificationType type, int? categoryId = null, int? itemId = null, string? excludedUserId = null);
 
-    public Task<IEnumerable<Notification>> GetAllNotifications(string userId);
+    public Task<(IEnumerable<Notification>, int total)> GetAllNotifications(string userId, int page, int size);
 
-    public Task<IEnumerable<Notification>> GetUnreadNotifications(string userId);
+    public Task<(IEnumerable<Notification>, int total)> GetUnreadNotifications(string userId, int page, int size);
 
     public Task SetNotificationAsSeen(int noticationId, string userId);
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.Notification;
 using StockNestMVC.Enums;
 using StockNestMVC.Interfaces;
@@ -19,26 +20,46 @@ public class NotificationService : INotificationService
         _notificationRepo = notificationRepo;
     }
 
-    public async Task<IEnumerable<NotificationDto>> GetAllNotifications(ClaimsPrincipal claimsPrincipal)
+    public async Task<PaginatedResultDto<NotificationDto>> GetAllNotifications(ClaimsPrincipal claimsPrincipal, int page, int size)
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
         if (user == null) throw new Exception("User not found");
 
-        var notifications = await _notificationRepo.GetAllNotifications(user.Id);
+        var (notifications, total) = await _notificationRepo.GetAllNotifications(user.Id, page, size);
 
-        return notifications.Select(n => n.ToNotificationDto());
+        //return notifications.Select(n => n.ToNotificationDto());
+        bool HasNextPage = (page * size) < total;
+
+        return new PaginatedResultDto<NotificationDto>
+        {
+            Items = notifications.Select(n => n.ToNotificationDto()),
+            TotalCount = total,
+            PageNumber = page,
+            PageSize = size,
+            HasNextPage = HasNextPage
+        };
     }
 
-    public async Task<IEnumerable<NotificationDto>> GetUnreadNotifications(ClaimsPrincipal claimsPrincipal)
+    public async Task<PaginatedResultDto<NotificationDto>> GetUnreadNotifications(ClaimsPrincipal claimsPrincipal, int page, int size)
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
         if (user == null) throw new Exception("User not found");
 
-        var notifications = await _notificationRepo.GetUnreadNotifications(user.Id);
+        var (notifications, total) = await _notificationRepo.GetUnreadNotifications(user.Id, page, size);
 
-        return notifications.Select(n => n.ToNotificationDto());
+        bool HasNextPage = (page * size) < total;
+
+        return new PaginatedResultDto<NotificationDto>
+        {
+            Items = notifications.Select(n => n.ToNotificationDto()),
+            TotalCount = total,
+            PageNumber = page,
+            PageSize = size,
+            HasNextPage = HasNextPage
+        };
+
     }
 
     public async Task SetAllNotificationsAsSeen(ClaimsPrincipal claimsPrincipal)

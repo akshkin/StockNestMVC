@@ -40,22 +40,37 @@ public class NotificationRepository : INotificationRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Notification>> GetAllNotifications(string userId)
+    public async Task<(IEnumerable<Notification>, int total)> GetAllNotifications(string userId, int page, int size)
     {
-        var notifications = await _context.Notifications
+        var query = _context.Notifications
             .Where(n => n.UserId == userId)
-            .OrderByDescending(n => n.CreatedAt)
-            .ToListAsync();
-        return notifications;
+            .OrderByDescending(n => n.CreatedAt);
+
+        int total = await query.CountAsync();
+
+        var notifications = await query.Skip((page - 1)* size).Take(size).ToListAsync();
+
+        //var notifications = await _context.Notifications
+        //    .Where(n => n.UserId == userId)
+        //    .OrderByDescending(n => n.CreatedAt)
+        //    .ToListAsync();
+        return (notifications, total);
     }
 
-    public async Task<IEnumerable<Notification>> GetUnreadNotifications(string userId)
+    public async Task<(IEnumerable<Notification>, int total)> GetUnreadNotifications(string userId, int page, int size)
     {
-        var notifications = await _context.Notifications
+        var query = _context.Notifications
             .Where(n => n.UserId == userId && n.Seen == false)
-            .OrderByDescending(n => n.CreatedAt)
-            .ToListAsync();
-        return notifications;
+            .OrderByDescending(n => n.CreatedAt);
+
+        int total = await query.CountAsync();
+
+        var notifications = await query.Skip((page - 1) * size).Take(size).ToListAsync();
+        //var notifications = await _context.Notifications
+        //    .Where(n => n.UserId == userId && n.Seen == false)
+        //    .OrderByDescending(n => n.CreatedAt)
+        //    .ToListAsync();
+        return (notifications, total);
     }
 
     public async Task SetNotificationAsSeen(int noticationId, string userId)
@@ -73,8 +88,11 @@ public class NotificationRepository : INotificationRepository
 
     public async Task SetAllNotificationsAsSeen(string userId)
     {
-        var notifications = await GetUnreadNotifications(userId);
-        foreach(var notification in notifications)
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId && n.Seen == false)
+            .ToListAsync();
+
+        foreach (var notification in notifications)
         {
             notification.Seen = true;
         }
