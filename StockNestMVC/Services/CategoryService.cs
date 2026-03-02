@@ -12,12 +12,14 @@ public class CategoryService : ICategoryService
     private readonly UserManager<AppUser> _userManager;
     private readonly ICategoryRepository _categoryRepo;
     private readonly IGroupRepository _groupRepo;
+    private readonly INotificationRepository _notificationRepo;
 
-    public CategoryService(UserManager<AppUser> userManager, ICategoryRepository categoryRepo, IGroupRepository groupRepo)
+    public CategoryService(UserManager<AppUser> userManager, ICategoryRepository categoryRepo, IGroupRepository groupRepo, INotificationRepository notificationRepo)
     {
         _userManager = userManager;
         _categoryRepo = categoryRepo;
         _groupRepo = groupRepo;
+        _notificationRepo = notificationRepo;
     }
 
     public async Task<CategoryDto> CreateCategory(int groupId, ClaimsPrincipal claimsPrincipal, CreateCategoryDto createCategoryDto)
@@ -42,6 +44,13 @@ public class CategoryService : ICategoryService
             CreatedBy = user.Id
         };
         await _categoryRepo.CreateCategory(newCategory);
+
+        var group = await _groupRepo.GetGroupById(groupId, user);
+
+        string message = $"{user.FullName} created a new category {newCategory.Name} in group {group.Name}";
+
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryCreated, newCategory.CategoryId);
+
         return newCategory.ToCategoryDto(user.FullName, null);
     }
 
@@ -104,6 +113,12 @@ public class CategoryService : ICategoryService
 
         await _categoryRepo.UpdateCategory(category);
 
+        var group = await _groupRepo.GetGroupById(groupId, user);
+
+        string message = $"{user.FullName} updated category {category.Name} in group {group.Name}";
+
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryUpdated, categoryId);
+
         return category.ToCategoryDto(category.CreatedBy, user.FullName);
     }
 
@@ -120,6 +135,12 @@ public class CategoryService : ICategoryService
         if (userRole == "Viewer") throw new Exception("You do not have permission to delete categories");
 
         await _categoryRepo.DeleteCategory(category);
+
+        var group = await _groupRepo.GetGroupById(groupId, user);
+
+        string message = $"{user.FullName} deleted category {category.Name} from group {group.Name}";
+
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryDeleted, categoryId);
 
         return category.ToCategoryDto(category.CreatedBy, category.UpdatedBy);
     }

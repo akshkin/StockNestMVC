@@ -2,7 +2,6 @@
 
 public enum NotificationType
 {
-    GroupCreated,
     GroupUpdated,
     GroupDeleted,
     CategoryCreated,

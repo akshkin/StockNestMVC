@@ -15,10 +15,10 @@ public class NotificationRepository : INotificationRepository
         _context = context;
     }
 
-    public async Task NotifyGroupMembers(int groupId, string actingUserId, string message, NotificationType type, int? categoryId, int? itemId)
+    public async Task NotifyGroupMembers(int groupId, string actingUserId, string message, NotificationType type, int? categoryId, int? itemId, string? excludedUserId)
     {
         var members = await _context.UserGroup
-            .Where(ug => ug.GroupId == groupId && ug.UserId != actingUserId)
+            .Where(ug => ug.GroupId == groupId && ug.UserId != actingUserId && ug.UserId != excludedUserId)
             .Select(ug => ug.UserId)
             .ToListAsync();
 
@@ -72,6 +72,20 @@ public class NotificationRepository : INotificationRepository
         {
             notification.Seen = false;
         }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task NotifyAddedRemovedMember(int groupId, string userId, string message, NotificationType type)
+    {
+        _context.Notifications.Add(new Models.Notification
+        {
+            UserId = userId,
+            Type = type,
+            Message = message,
+            GroupId = groupId,
+            Seen = false,
+            CreatedAt = DateTime.UtcNow,
+        });
         await _context.SaveChangesAsync();
     }
 }

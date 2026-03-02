@@ -4,6 +4,7 @@ using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace StockNestMVC.Services;
 
@@ -11,11 +12,13 @@ public class GroupService : IGroupService
 {
     private readonly IGroupRepository _groupRepo;
     private readonly UserManager<AppUser> _userManager;
+    private readonly INotificationRepository _notificationRepo;
 
-    public GroupService(IGroupRepository groupRepo, UserManager<AppUser> userManager)
+    public GroupService(IGroupRepository groupRepo, UserManager<AppUser> userManager, INotificationRepository notificationRepo)
     {
         _groupRepo = groupRepo;
         _userManager = userManager;
+        _notificationRepo = notificationRepo;
     }
 
     public async Task<GroupDto> CreateGroup(CreateGroupDto createGroupDto, ClaimsPrincipal claimsPrincipal)
@@ -30,7 +33,7 @@ public class GroupService : IGroupService
         if (duplicate)
             throw new Exception("Group with the same name already exists");
 
-        var group = new Group
+        var group = new Models.Group
         {
             Name = createGroupDto.Name,
             CreatedBy = user.Id,
@@ -109,7 +112,11 @@ public class GroupService : IGroupService
         existingGroup.UpdatedBy = user.Id;
         existingGroup.UpdatedAt = DateTime.UtcNow;
 
+        string message = $"{user.FullName} updated group name {existingGroup.Name} to {updateGroupDto.Name}";
+
         await _groupRepo.UpdateGroup(existingGroup);
+
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.GroupUpdated, groupId);
 
         return existingGroup.ToGroupDto(roleInGroup, existingGroup.CreatedBy, existingGroup.UpdatedBy);
     }
@@ -120,7 +127,7 @@ public class GroupService : IGroupService
 
         if (user == null) throw new Exception("User not found");
 
-        Group group = await _groupRepo.GetGroupById(groupId, user);
+        var group = await _groupRepo.GetGroupById(groupId, user);
 
         if (group == null) throw new Exception("Group not found");
 
@@ -166,7 +173,11 @@ public class GroupService : IGroupService
         {
             throw new Exception("Only the group owner can delete the group");
         }
-        
+
+        string message = $"{user.FullName} deleted group {existingGroup.Name}";
+
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.GroupDeleted, groupId);
+
         return existingGroup.ToGroupDto(role, null, null);
     }
 
@@ -204,6 +215,14 @@ public class GroupService : IGroupService
                 Role = role
             };
             await _groupRepo.InviteUser(newMembership);
+
+            // notify added member
+            string addedUserMessage = $"{user.FullName} added you to group {group.Name}";
+            await _notificationRepo.NotifyAddedRemovedMember(groupId, invitedUser.Id, addedUserMessage, Enums.NotificationType.UserRemovedFromGroup);
+
+            // notify other members
+            string message = $"{user.FullName} added {invitedUser.FullName} to group {group.Name}";           
+            await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.UserJoinedGroup, null, null, invitedUser.Id);
         }
         else
             throw new Exception("Only the group owner can invite users");
@@ -242,9 +261,9 @@ public class GroupService : IGroupService
 
         if (user == null) throw new Exception("User not found");
 
-        var group = await _groupRepo.GetUserGroup(groupId, user);
+        var userGroup = await _groupRepo.GetUserGroup(groupId, user);
 
-        if (group == null) throw new Exception("Group not found");
+        if (userGroup == null) throw new Exception("Group not found");
 
         var member = await _userManager.FindByIdAsync(userId);
 
@@ -259,6 +278,16 @@ public class GroupService : IGroupService
 
         if (roleInGroup == "Owner" || roleInGroup == "Co-Owner")
         {
+            var group = await _groupRepo.GetGroupById(groupId, user);
+
+            // notify removed member
+            string removedUserMessage = $"{user.FullName} removed you from group {group.Name}";
+            await _notificationRepo.NotifyAddedRemovedMember(groupId, userId, removedUserMessage, Enums.NotificationType.UserRemovedFromGroup);
+           
+            // notify other members
+            string message = $"{user.FullName} removed {member.FullName} from group {group.Name}";
+            await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.UserRemovedFromGroup, null, null, userId);
+
             await _groupRepo.RemoveGroupMember(groupId, membership);
         }
         else
