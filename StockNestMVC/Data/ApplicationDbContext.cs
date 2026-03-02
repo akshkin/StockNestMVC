@@ -20,6 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     // name is UserGroup as that is how it got saved in the database
     public DbSet<UserGroup> UserGroup { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

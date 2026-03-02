@@ -8,11 +8,17 @@ using StockNestMVC.Models;
 using StockNestMVC.Repositories;
 using StockNestMVC.Services;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -76,8 +82,8 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<UserGroupService>();
 builder.Services.AddScoped<IStatsRepository, StatsRepository>();
 builder.Services.AddScoped<IStatsService, StatsService>();
-
-
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddCors(options =>
 {
