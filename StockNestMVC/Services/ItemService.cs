@@ -13,13 +13,15 @@ public class ItemService : IItemService
     private readonly IItemRepository _itemRepo;
     private readonly ICategoryRepository _categoryRepo;
     private readonly UserGroupService _userGroupService;
+    private readonly INotificationRepository _notificationService;
 
-    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, UserGroupService userGroupService)
+    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, UserGroupService userGroupService, INotificationRepository notificationService)
     {
         _userManager = userManager;
         _itemRepo = itemRepo;
         _categoryRepo = categoryRepo;
         _userGroupService = userGroupService;
+        _notificationService = notificationService;
     }
 
     public async Task<ItemDto> CreateItem(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, CreateItemDto createItemDto)
@@ -38,7 +40,13 @@ public class ItemService : IItemService
             CreatedBy = user.Id
         };
 
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
+
+        string message = $"{user.FullName} created a new item in category {category.Name}";
+
         await _itemRepo.CreateItem(item);
+
+        await _notificationService.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.ItemCreated, categoryId, item.ItemId);
 
         return item.ToItemDto(user.FullName, null);
     }
@@ -103,6 +111,10 @@ public class ItemService : IItemService
 
         await _itemRepo.UpdateItem(item);
 
+
+        string message = $"{user.FullName} updated item {item.Name} in category {category.Name}";
+        await _notificationService.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.ItemUpdated, categoryId, itemId);
+
         return item.ToItemDto(user.FullName, item.UpdatedBy);
     }
 
@@ -115,6 +127,11 @@ public class ItemService : IItemService
         if (category == null) throw new Exception("Category not found");
 
         var items = await _itemRepo.DeleteItem(itemIds);
+
+        var itemNames = string.Join(",", items.Select(i => i.Name));
+
+        string message = $"{user.FullName} deleted item(s) {itemNames} from category {category.Name}";
+        await _notificationService.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.ItemUpdated, categoryId);
 
         return items.Select(i => i.ToItemDto(i.CreatedBy, i.UpdatedBy));
     }
