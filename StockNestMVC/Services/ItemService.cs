@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.Item;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
@@ -51,7 +52,7 @@ public class ItemService : IItemService
         return item.ToItemDto(user.FullName, null);
     }
 
-    public async Task<IEnumerable<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal)
+    public async Task<PaginatedResultDto<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, int page, int size)
     {
         var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
@@ -59,7 +60,7 @@ public class ItemService : IItemService
 
         if (category == null) throw new Exception("Category not found");
 
-        var items = await _itemRepo.GetAll(groupId, categoryId);
+        var (items, total) = await _itemRepo.GetAll(groupId, categoryId, page, size);
 
         var itemsDto = new List<ItemDto>();
 
@@ -68,7 +69,17 @@ public class ItemService : IItemService
             var (creator, updator) = await GetCreatorUpdatorNames(item, user);
             itemsDto.Add(item.ToItemDto(creator, updator));
         }
-        return itemsDto;
+
+        bool hasNextPage = (page * size) < total;
+        //return itemsDto;
+        return new PaginatedResultDto<ItemDto>
+        {
+            Items = itemsDto,
+            TotalCount = total,
+            PageNumber = page,
+            PageSize = size,
+            HasNextPage = hasNextPage,
+        };
     }
 
     public async Task<ItemDto?> GetItemById(int groupId, int categoryId, int itemId, ClaimsPrincipal claimsPrincipal)

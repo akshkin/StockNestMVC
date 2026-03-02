@@ -140,7 +140,7 @@ public class CategoryService : ICategoryService
 
         string message = $"{user.FullName} deleted category {category.Name} from group {group.Name}";
 
-        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryDeleted, categoryId);
+        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryDeleted);
 
         return category.ToCategoryDto(category.CreatedBy, category.UpdatedBy);
     }

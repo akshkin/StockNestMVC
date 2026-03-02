@@ -5,7 +5,7 @@ namespace StockNestMVC.Interfaces;
 public interface IItemRepository
 {
     public Task CreateItem(Item item);
-    public Task<IEnumerable<Item>> GetAll(int groupId, int categoryId);
+    public Task<(IEnumerable<Item>, int total)> GetAll(int groupId, int categoryId, int page, int size);
 
     public Task<Item?> GetItemById(int categoryId, int itemIid);
 

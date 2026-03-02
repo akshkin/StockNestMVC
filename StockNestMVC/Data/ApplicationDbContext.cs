@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Models;
+using System.Reflection.Emit;
 
 namespace StockNestMVC.Data;
 
@@ -38,5 +39,23 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .HasOne(ug => ug.Group)
             .WithMany(ug => ug.UserGroups)
             .HasForeignKey(ug => ug.GroupId);
+
+        builder.Entity<Notification>()
+            .HasOne(n => n.Item)
+            .WithMany()
+            .HasForeignKey(n => n.ItemId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Notification>()
+            .HasOne(n => n.Category)
+            .WithMany()
+            .HasForeignKey(n => n.CategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<Notification>()
+            .HasOne(n => n.Group)
+            .WithMany()
+            .HasForeignKey(n => n.GroupId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

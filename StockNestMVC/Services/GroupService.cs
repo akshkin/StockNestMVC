@@ -167,6 +167,9 @@ public class GroupService : IGroupService
 
         if (role == "Owner" || role == "Co-Owner")
         {
+            string message = $"{user.FullName} deleted group {existingGroup.Name}";
+
+            await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.GroupDeleted);
             await _groupRepo.DeleteGroup(existingGroup);
         }
         else
@@ -174,9 +177,6 @@ public class GroupService : IGroupService
             throw new Exception("Only the group owner can delete the group");
         }
 
-        string message = $"{user.FullName} deleted group {existingGroup.Name}";
-
-        await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.GroupDeleted, groupId);
 
         return existingGroup.ToGroupDto(role, null, null);
     }

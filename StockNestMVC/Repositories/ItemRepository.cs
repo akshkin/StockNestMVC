@@ -20,11 +20,15 @@ public class ItemRepository : IItemRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Item>> GetAll(int groupId, int categoryId)
+    public async Task<(IEnumerable<Item>, int total)> GetAll(int groupId, int categoryId, int page, int size)
     {
-        var items = await _context.Items.Where(i => i.CategoryId == categoryId).ToListAsync();
+        var query = _context.Items.Where(i => i.CategoryId == categoryId);
 
-        return items;
+        var total = await query.CountAsync();
+
+        var items = await query.Skip((page - 1) * size).Take(size).ToListAsync();
+
+        return (items, total);
     }
 
     public async Task<Item?> GetItemById(int categoryId, int itemIid)
