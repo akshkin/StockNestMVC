@@ -74,4 +74,18 @@ public class NotificationsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("latest")]
+    public async Task<IActionResult> GetLatestNotifications()
+    {
+        try
+        {
+            var notifications = await _notificationService.GetLatestNotifications(User);
+            return Ok(notifications);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

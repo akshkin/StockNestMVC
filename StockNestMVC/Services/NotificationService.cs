@@ -59,4 +59,15 @@ public class NotificationService : INotificationService
 
         await _notificationRepo.SetNotificationAsSeen(notificationId, user.Id);
     }
+
+    public async Task<IEnumerable<NotificationDto>> GetLatestNotifications(ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("User not found");
+
+        var notifications = await _notificationRepo.GetLatestNotifications(7, user.Id);
+
+        return notifications.Select(n => n.ToNotificationDto());
+    }
 }

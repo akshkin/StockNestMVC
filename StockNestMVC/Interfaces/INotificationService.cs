@@ -12,5 +12,8 @@ public interface INotificationService
 
     public Task SetNotificationAsSeen(int notificationId, ClaimsPrincipal claimsPrincipal);
 
-    Task SetAllNotificationsAsSeen(ClaimsPrincipal claimsPrincipal);
+    public Task SetAllNotificationsAsSeen(ClaimsPrincipal claimsPrincipal);
+
+    public Task<IEnumerable<NotificationDto>> GetLatestNotifications(ClaimsPrincipal claimsPrincipal);
+
 }

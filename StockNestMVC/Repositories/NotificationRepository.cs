@@ -42,13 +42,19 @@ public class NotificationRepository : INotificationRepository
 
     public async Task<IEnumerable<Notification>> GetAllNotifications(string userId)
     {
-        var notifications = await _context.Notifications.Where(n => n.UserId == userId).ToListAsync();
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId)
+            .OrderByDescending(n => n.CreatedAt)
+            .ToListAsync();
         return notifications;
     }
 
     public async Task<IEnumerable<Notification>> GetUnreadNotifications(string userId)
     {
-        var notifications = await _context.Notifications.Where(n => n.UserId == userId && n.Seen == false).ToListAsync();
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId && n.Seen == false)
+            .OrderByDescending(n => n.CreatedAt)
+            .ToListAsync();
         return notifications;
     }
 
@@ -70,7 +76,7 @@ public class NotificationRepository : INotificationRepository
         var notifications = await GetUnreadNotifications(userId);
         foreach(var notification in notifications)
         {
-            notification.Seen = false;
+            notification.Seen = true;
         }
         await _context.SaveChangesAsync();
     }
@@ -87,5 +93,15 @@ public class NotificationRepository : INotificationRepository
             CreatedAt = DateTime.UtcNow,
         });
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Notification>> GetLatestNotifications(int count, string userId)
+    {
+        var notifications = await _context.Notifications
+            .Where(n => n.UserId == userId)
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(count)
+            .ToListAsync();
+        return notifications;
     }
 }

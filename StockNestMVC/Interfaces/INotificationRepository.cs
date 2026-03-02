@@ -17,4 +17,6 @@ public interface INotificationRepository
 
     public Task NotifyAddedRemovedMember(int groupId, string userId, string message, NotificationType type);
 
+    public Task<IEnumerable<Notification>> GetLatestNotifications(int count, string userId);
+
 }
