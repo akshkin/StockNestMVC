@@ -522,6 +522,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "StockNestMVC.Controllers.NotificationsController",
+    "Method": "GetUnreadNotificationsCount",
+    "RelativePath": "api/Notifications/unread-count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "StockNestMVC.Controllers.StatsController",
     "Method": "GetStats",
     "RelativePath": "api/Stats",

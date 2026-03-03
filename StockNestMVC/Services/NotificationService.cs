@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.Notification;
-using StockNestMVC.Enums;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
@@ -28,7 +27,6 @@ public class NotificationService : INotificationService
 
         var (notifications, total) = await _notificationRepo.GetAllNotifications(user.Id, page, size);
 
-        //return notifications.Select(n => n.ToNotificationDto());
         bool HasNextPage = (page * size) < total;
 
         return new PaginatedResultDto<NotificationDto>
@@ -90,5 +88,15 @@ public class NotificationService : INotificationService
         var notifications = await _notificationRepo.GetLatestNotifications(7, user.Id);
 
         return notifications.Select(n => n.ToNotificationDto());
+    }
+
+    public async Task<int> GetUnreadNotificationsCount(ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("User not found");
+
+        int count = await _notificationRepo.GetUnreadNotificationsCount(user.Id);
+        return count;
     }
 }

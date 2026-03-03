@@ -17,4 +17,6 @@ public interface INotificationService
 
     public Task<IEnumerable<NotificationDto>> GetLatestNotifications(ClaimsPrincipal claimsPrincipal);
 
+    public Task<int> GetUnreadNotificationsCount(ClaimsPrincipal claimsPrincipal);
+
 }

@@ -50,10 +50,6 @@ public class NotificationRepository : INotificationRepository
 
         var notifications = await query.Skip((page - 1)* size).Take(size).ToListAsync();
 
-        //var notifications = await _context.Notifications
-        //    .Where(n => n.UserId == userId)
-        //    .OrderByDescending(n => n.CreatedAt)
-        //    .ToListAsync();
         return (notifications, total);
     }
 
@@ -66,10 +62,7 @@ public class NotificationRepository : INotificationRepository
         int total = await query.CountAsync();
 
         var notifications = await query.Skip((page - 1) * size).Take(size).ToListAsync();
-        //var notifications = await _context.Notifications
-        //    .Where(n => n.UserId == userId && n.Seen == false)
-        //    .OrderByDescending(n => n.CreatedAt)
-        //    .ToListAsync();
+    
         return (notifications, total);
     }
 
@@ -121,5 +114,13 @@ public class NotificationRepository : INotificationRepository
             .Take(count)
             .ToListAsync();
         return notifications;
+    }
+
+    public async Task<int> GetUnreadNotificationsCount(string userId)
+    {
+        var count = await _context.Notifications
+            .Where(n => n.UserId == userId && n.Seen == false).CountAsync();
+
+        return count;
     }
 }

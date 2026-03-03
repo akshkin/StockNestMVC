@@ -89,4 +89,18 @@ public class NotificationsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("unread-count")]
+    public async Task<IActionResult> GetUnreadNotificationsCount()
+    {
+        try
+        {
+            int count = await _notificationService.GetUnreadNotificationsCount(User);
+            return Ok(count);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

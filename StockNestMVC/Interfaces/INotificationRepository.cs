@@ -19,4 +19,6 @@ public interface INotificationRepository
 
     public Task<IEnumerable<Notification>> GetLatestNotifications(int count, string userId);
 
+    public Task<int> GetUnreadNotificationsCount(string userId);
+
 }
