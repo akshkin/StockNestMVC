@@ -1,4 +1,5 @@
-﻿using StockNestMVC.DTOs.Group;
+﻿using StockNestMVC.DTOs;
+using StockNestMVC.DTOs.Group;
 using StockNestMVC.Models;
 
 namespace StockNestMVC.Interfaces;
@@ -30,4 +31,7 @@ public interface IGroupRepository
     public Task<bool> CheckDuplicateGroup(AppUser user, string groupName, int? groupId);
 
     public Task<bool> CheckIfMemberInGroup(int groupId, AppUser user);
+
+    public Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm);
+
 }

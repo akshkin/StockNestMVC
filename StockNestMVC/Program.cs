@@ -84,6 +84,7 @@ builder.Services.AddScoped<IStatsRepository, StatsRepository>();
 builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 builder.Services.AddCors(options =>
 {

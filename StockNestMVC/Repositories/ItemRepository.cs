@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
+using StockNestMVC.DTOs;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 
@@ -26,7 +27,11 @@ public class ItemRepository : IItemRepository
 
         var total = await query.CountAsync();
 
-        var items = await query.Skip((page - 1) * size).Take(size).ToListAsync();
+        var items = await query.OrderByDescending(i => i.UpdatedAt)
+            .OrderByDescending(i => i.CreatedAt)
+            .Skip((page - 1) * size)
+            .Take(size)
+            .ToListAsync();
 
         return (items, total);
     }
@@ -75,4 +80,22 @@ public class ItemRepository : IItemRepository
 
         return duplicate;
     }
+
+    public async Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm)
+    {
+        var items = await _context.Items
+            .Where(i => i.Category.Group.UserGroups.Any(ug => ug.UserId == user.Id) && i.Name.ToLower().Contains(searchTerm.Trim().ToLower()))
+            .Select(i => new SearchResultDto
+            {
+                Type = "Item",
+                GroupId = i.Category.GroupId,
+                Name = i.Name,
+                CategoryId = i.CategoryId,
+                ItemId = i.ItemId,
+            })
+            .ToListAsync();
+
+        return items;
+    }
+
 }

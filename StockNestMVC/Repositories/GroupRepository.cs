@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
+using StockNestMVC.DTOs;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using System.Data;
+using System.Text.RegularExpressions;
 using Group = StockNestMVC.Models.Group;
 
 namespace StockNestMVC.Repositories;
@@ -131,5 +133,20 @@ public class GroupRepository : IGroupRepository
         if (userGroup == null) return null;
 
         return userGroup;
+    }
+
+    public async Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm)
+    {
+        var userGroups = await _context.UserGroup
+            .Include(ug => ug.Group)
+            .Where(ug => ug.UserId == user.Id && ug.Group.Name.ToLower().Contains(searchTerm.Trim().ToLower()))
+            .Select(ug => new SearchResultDto
+            {
+                Type = "Group",
+                GroupId = ug.GroupId,
+                Name = ug.Group.Name
+            }).ToListAsync();
+
+        return userGroups;
     }
 }

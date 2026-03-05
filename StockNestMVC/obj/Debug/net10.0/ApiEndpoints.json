@@ -532,6 +532,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "StockNestMVC.Controllers.SearchController",
+    "Method": "Search",
+    "RelativePath": "api/Search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "StockNestMVC.Controllers.StatsController",
     "Method": "GetStats",
     "RelativePath": "api/Stats",
