@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\interfaces\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\interfaces\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\repositories\\itemrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\repositories\\itemrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -73,7 +85,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "secrets.json",
               "DocumentMoniker": "C:\\Users\\aksh\\AppData\\Roaming\\Microsoft\\UserSecrets\\404d56d2-c27d-4e55-967d-083506a59eb6\\secrets.json",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\404d56d2-c27d-4e55-967d-083506a59eb6\\secrets.json",
@@ -86,28 +98,54 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
-              "RelativeDocumentMoniker": "StockNestMVC\\Program.cs",
-              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
-              "RelativeToolTip": "StockNestMVC\\Program.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAE8AAABAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AccountService.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\AccountService.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Services\\AccountService.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\AccountService.cs",
+              "RelativeToolTip": "StockNestMVC\\Services\\AccountService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-04T08:12:23.659Z",
+              "WhenOpened": "2026-03-05T09:16:18.012Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
+              "Title": "IAccountService.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IAccountService.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Interfaces\\IAccountService.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\IAccountService.cs",
+              "RelativeToolTip": "StockNestMVC\\Interfaces\\IAccountService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-05T09:16:09.925Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "StockNestMVC\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAowHUAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-05T09:16:01.882Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "SearchController.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Controllers\\SearchController.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Controllers\\SearchController.cs",
@@ -115,25 +153,36 @@
               "RelativeToolTip": "StockNestMVC\\Controllers\\SearchController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAwBgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:32:21.614Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:32:21.614Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Program.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
+              "RelativeToolTip": "StockNestMVC\\Program.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAE8AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-04T08:12:23.659Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ItemRepository.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\ItemRepository.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Repositories\\ItemRepository.cs",
               "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\ItemRepository.cs",
               "RelativeToolTip": "StockNestMVC\\Repositories\\ItemRepository.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAwwFoAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-02T20:02:43.357Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "SearchService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\SearchService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Services\\SearchService.cs",
@@ -141,12 +190,11 @@
               "RelativeToolTip": "StockNestMVC\\Services\\SearchService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:06:46.756Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:06:46.756Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "CategoryRepository.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\CategoryRepository.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Repositories\\CategoryRepository.cs",
@@ -154,12 +202,11 @@
               "RelativeToolTip": "StockNestMVC\\Repositories\\CategoryRepository.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAAAEoAAAB5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:15:15.546Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:15:15.546Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "GroupRepository.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\GroupRepository.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Repositories\\GroupRepository.cs",
@@ -167,12 +214,11 @@
               "RelativeToolTip": "StockNestMVC\\Repositories\\GroupRepository.cs",
               "ViewState": "AgIAAIQAAAAAAAAAAAAwwI8AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:08:42.963Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:08:42.963Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "INotificationService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\INotificationService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Interfaces\\INotificationService.cs",
@@ -180,12 +226,11 @@
               "RelativeToolTip": "StockNestMVC\\Interfaces\\INotificationService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:06:26.595Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:06:26.595Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "SearchResultDto.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\DTOs\\SearchResultDto.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\DTOs\\SearchResultDto.cs",
@@ -193,12 +238,11 @@
               "RelativeToolTip": "StockNestMVC\\DTOs\\SearchResultDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-03T19:04:56.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-03T19:04:56.672Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "NotificationService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\NotificationService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Services\\NotificationService.cs",
@@ -210,7 +254,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "NotificationRepository.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Repositories\\NotificationRepository.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Repositories\\NotificationRepository.cs",
@@ -222,7 +266,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "NotificationMapper.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Mappers\\NotificationMapper.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Mappers\\NotificationMapper.cs",
@@ -234,7 +278,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "NotificationDto.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\DTOs\\Notification\\NotificationDto.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\DTOs\\Notification\\NotificationDto.cs",
@@ -246,7 +290,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "INotificationRepository.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Interfaces\\INotificationRepository.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Interfaces\\INotificationRepository.cs",
@@ -258,7 +302,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "ItemService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Services\\ItemService.cs",
