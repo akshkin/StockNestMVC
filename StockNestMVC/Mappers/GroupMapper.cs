@@ -5,13 +5,17 @@ namespace StockNestMVC.Mappers;
 
 public static class GroupMapper
 {
-    public static GroupDto ToGroupDto(this Group group, string role)
+    public static GroupDto ToGroupDto(this Group group, string role, string creator, string? updator)
     {
         return new GroupDto
         {
             GroupId = group.GroupId,
             Name = group.Name,
-            Role = role
+            Role = role,
+            CreatedAt = group.CreatedAt,
+            CreatedBy = creator,
+            UpdatedAt = group.UpdatedAt,
+            UpdatedBy = updator,
         };
     }
 

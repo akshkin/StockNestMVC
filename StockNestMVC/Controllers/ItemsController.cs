@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.Item;
 using StockNestMVC.Interfaces;
-using StockNestMVC.Models;
 
 namespace StockNestMVC.Controllers;
 
@@ -12,13 +10,11 @@ namespace StockNestMVC.Controllers;
 [Authorize]
 public class ItemsController : ControllerBase
 {
-    private readonly IItemRepository _itemRepo;
-    private readonly UserManager<AppUser> _userManager;
+    private readonly IItemService _itemService;
 
-    public ItemsController(IItemRepository itemRepo, UserManager<AppUser> userManager)
+    public ItemsController(IItemService itemService)
     {
-        _itemRepo = itemRepo;
-        _userManager = userManager;
+        _itemService = itemService;
     }
 
     [HttpGet("group/{groupId}/category/{categoryId}")]
@@ -26,11 +22,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var items = await _itemRepo.GetAll(groupId, categoryId, user);
+            var items = await _itemService.GetAll(groupId, categoryId, User);
 
             return Ok(items);
         }
@@ -45,11 +37,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var item = await _itemRepo.CreateItem(groupId, categoryId, user, createItemDto);
+            var item = await _itemService.CreateItem(groupId, categoryId, User, createItemDto);
 
             return Ok(item);
         }
@@ -64,11 +52,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var item = await _itemRepo.GetItemById(groupId, categoryId, itemId, user);
+            var item = await _itemService.GetItemById(groupId, categoryId, itemId, User);
 
             if (item == null) return NotFound("Item not found");
 
@@ -85,11 +69,7 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var item = await _itemRepo.UpdateItem(groupId, categoryId, itemId, user, updateItemDto);
+            var item = await _itemService.UpdateItem(groupId, categoryId, itemId, User, updateItemDto);
 
             if (item == null) return NotFound("Item not found");
 
@@ -102,26 +82,12 @@ public class ItemsController : ControllerBase
     }
 
 
-
-    private async Task<AppUser?> IsUserExists()
-    {
-        var user = await _userManager.GetUserAsync(User);
-
-        if (user == null) return null;
-
-        return user;
-    }
-
     [HttpPost("group/{groupId}/category/{categoryId}/delete")]
     public async Task<IActionResult> DeleteItem(int groupId, int categoryId, List<int> itemIds)
     {
         try
         {
-            var user = await IsUserExists();
-
-            if (user == null) return Unauthorized();
-
-            var items = await _itemRepo.DeleteItem(groupId, categoryId, itemIds, user);
+            var items = await _itemService.DeleteItem(groupId, categoryId, itemIds, User);
 
             if (items == null) return NotFound("Items not found");
             return Ok("Successfully deleted items!");

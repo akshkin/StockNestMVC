@@ -1,18 +1,19 @@
-﻿using StockNestMVC.DTOs.Category;
-using StockNestMVC.Models;
+﻿using StockNestMVC.Models;
 
 namespace StockNestMVC.Interfaces;
 
 public interface ICategoryRepository
 {
-    public Task<IEnumerable<CategoryDto>> GetCategoriesInGroup(int groupId, AppUser user);
+    public Task<IEnumerable<Category>> GetCategoriesInGroup(int groupId);
 
-    public Task<CategoryDto?> GetCategoryById(int groupId, int categoryId, AppUser user);
+    public Task<Category?> GetCategoryById(int groupId, int categoryId);
 
-    public Task<CategoryDto> CreateCategory(int groupId, AppUser user, CreateCategoryDto createCategoryDto);
+    public Task CreateCategory(Category category);
 
-    public Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, AppUser user, CreateCategoryDto updateCategoryDto);
+    public Task UpdateCategory(Category category);
 
-    public Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, AppUser user);
+    public Task DeleteCategory(Category caetgory);
+
+    public Task<bool> CheckDuplicate(int groupId, string name, int? categoryId);
 
 }
