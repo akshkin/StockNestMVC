@@ -121,9 +121,16 @@ public class GroupsController : ControllerBase
     [HttpGet("{groupId}/members")]
     public async Task<IActionResult> GetGroupMembers(int groupId)
     {
-        var members = await _groupService.GetGroupMembers(groupId, User);
+        try
+        {
+            var members = await _groupService.GetGroupMembers(groupId, User);
 
-        return Ok(members);
+            return Ok(members);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPost("{groupId}/deleteMember/{userId}")]

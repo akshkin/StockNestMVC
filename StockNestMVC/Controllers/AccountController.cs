@@ -113,9 +113,11 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public IActionResult Me()
+    public async Task<IActionResult> Me()
     {
-        return Ok(new { user = User.Identity.IsAuthenticated });
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return Unauthorized("No user found");
+        return Ok(new { user = User.Identity.IsAuthenticated, name = user.FirstName });
     }
 
     private async Task GenerateTokens(AppUser user)

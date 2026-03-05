@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Data;
+using StockNestMVC.DTOs;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 
@@ -67,4 +68,22 @@ public class CategoryRepository : ICategoryRepository
         }
         return duplicate;
     }
+
+    public async Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm)
+    {
+        var categories = await _context.Categories
+            .Where(c => c.Group.UserGroups.Any(ug => ug.UserId == user.Id) && c.Name.ToLower().Contains(searchTerm.Trim().ToLower()))
+            .Select(c => new SearchResultDto
+            {
+                Type = "Category",
+                GroupId = c.GroupId,
+                Name = c.Name,
+                CategoryId = c.CategoryId
+            })
+            .ToListAsync();
+
+        return categories;        
+    }
+
+
 }

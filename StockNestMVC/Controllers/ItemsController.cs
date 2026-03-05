@@ -18,11 +18,11 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet("group/{groupId}/category/{categoryId}")]
-    public async Task<IActionResult> GetAllItems(int groupId, int categoryId)
+    public async Task<IActionResult> GetAllItems(int groupId, int categoryId, int page = 1, int size = 10)
     {
         try
         {
-            var items = await _itemService.GetAll(groupId, categoryId, User);
+            var items = await _itemService.GetAll(groupId, categoryId, User, page, size);
 
             return Ok(items);
         }

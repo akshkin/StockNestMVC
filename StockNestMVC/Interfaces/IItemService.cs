@@ -1,4 +1,5 @@
-﻿using StockNestMVC.DTOs.Item;
+﻿using StockNestMVC.DTOs;
+using StockNestMVC.DTOs.Item;
 using System.Security.Claims;
 
 namespace StockNestMVC.Interfaces;
@@ -7,7 +8,7 @@ public interface IItemService
 {
     public Task<ItemDto> CreateItem(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, CreateItemDto createItemDto);
 
-    public Task<IEnumerable<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal);
+    public Task<PaginatedResultDto<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, int page, int size);
 
     public Task<ItemDto?> GetItemById(int groupId, int categoryId, int itemId, ClaimsPrincipal claimsPrincipal);
 

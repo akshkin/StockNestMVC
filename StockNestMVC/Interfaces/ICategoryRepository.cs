@@ -1,4 +1,5 @@
-﻿using StockNestMVC.Models;
+﻿using StockNestMVC.DTOs;
+using StockNestMVC.Models;
 
 namespace StockNestMVC.Interfaces;
 
@@ -15,5 +16,7 @@ public interface ICategoryRepository
     public Task DeleteCategory(Category caetgory);
 
     public Task<bool> CheckDuplicate(int groupId, string name, int? categoryId);
+
+    public Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm);
 
 }
