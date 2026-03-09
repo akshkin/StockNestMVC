@@ -18,4 +18,6 @@ public interface IItemRepository
 
     public Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm);
 
+    public Task<int> GetItemPageIndex(AppUser user, int categoryId, int itemId);
+
 }

@@ -15,4 +15,6 @@ public interface IItemService
     public Task<ItemDto?> UpdateItem(int groupId, int categoryId, int itemId, ClaimsPrincipal claimsPrincipal, CreateItemDto updateItemDto);
 
     public Task<IEnumerable<ItemDto?>> DeleteItem(int groupId, int categoryId, List<int> itemIds, ClaimsPrincipal claimsPrincipal);
+
+    public Task<int> GetPageIndex(ClaimsPrincipal claimsPrincipal, int groupId, int categoryId, int itemId);
 }

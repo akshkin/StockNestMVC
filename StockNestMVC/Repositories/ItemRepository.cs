@@ -27,7 +27,8 @@ public class ItemRepository : IItemRepository
 
         var total = await query.CountAsync();
 
-        var items = await query.OrderByDescending(i => i.UpdatedAt)
+        var items = await query
+            .OrderByDescending(i => i.UpdatedAt)
             .OrderByDescending(i => i.CreatedAt)
             .Skip((page - 1) * size)
             .Take(size)
@@ -96,6 +97,23 @@ public class ItemRepository : IItemRepository
             .ToListAsync();
 
         return items;
+    }
+
+    public async Task<int> GetItemPageIndex(AppUser user, int categoryId, int itemId)
+    {
+        var item = await _context.Items
+        .FirstOrDefaultAsync(i => i.CategoryId == categoryId &&  i.ItemId == itemId);
+
+        if (item == null)
+            throw new Exception("Item not found");
+
+        var countBefore = await _context.Items
+          .Where(i => i.CategoryId == categoryId && i.CreatedAt > item.CreatedAt)
+          .CountAsync();
+
+        var pageIndex = countBefore / 10;
+
+        return pageIndex + 1;
     }
 
 }
