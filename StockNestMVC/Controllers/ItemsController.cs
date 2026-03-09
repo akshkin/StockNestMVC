@@ -97,4 +97,18 @@ public class ItemsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("group/{groupId}/category/{categoryId}/item/{itemId}/page-index")]
+    public async Task<IActionResult> GetItemPageIndex(int groupId, int categoryId, int itemId)
+    {
+        try
+        {
+            var pageIndex = await _itemService.GetPageIndex(User, groupId, categoryId, itemId);
+            return Ok(pageIndex);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

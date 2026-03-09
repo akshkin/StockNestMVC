@@ -164,4 +164,17 @@ public class ItemService : IItemService
         }
         return (creatorName, updaterName);
     }
+
+    public async Task<int> GetPageIndex(ClaimsPrincipal claimsPrincipal, int groupId, int categoryId, int itemId)
+    {
+        var (user, membership) = await _userGroupService.ValidateMutationOperations(claimsPrincipal, groupId);
+
+        var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
+
+        if (category == null) throw new Exception("Category not found");
+
+        var pageIndex = await _itemRepo.GetItemPageIndex(user, categoryId, itemId);
+
+        return pageIndex;
+    }
 }
