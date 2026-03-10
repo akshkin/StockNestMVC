@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
@@ -118,6 +117,38 @@ public class AccountController : ControllerBase
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return Unauthorized("No user found");
         return Ok(new { user = User.Identity.IsAuthenticated, name = user.FirstName });
+    }
+
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        try
+        {
+            var userDetails = await _accountService.GetProfile(User);
+
+            return Ok(userDetails);
+        }
+        catch (Exception ex) 
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize]
+    [HttpPost("update-profile")]
+    public async Task<IActionResult> UpdateProfile(UpdateUserDto updateUserDto)
+    {
+        try
+        {
+            var userDetails = await _accountService.UpdateAccount(User, updateUserDto);
+
+            return Ok(userDetails);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     private async Task GenerateTokens(AppUser user)

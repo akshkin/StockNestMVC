@@ -13,7 +13,8 @@ public static class UserMapper
             FirstName = user.FirstName,
             LastName = user.LastName,
             FullName = user.FullName,
-            Email = user.Email
+            Email = user.Email,
+            ProfileImageUrl = user.ProfileImageUrl
         };
     }
 

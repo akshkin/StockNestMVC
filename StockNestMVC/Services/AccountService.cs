@@ -4,6 +4,7 @@ using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
+using System.Security.Claims;
 
 namespace StockNestMVC.Services;
 
@@ -67,6 +68,30 @@ public class AccountService : IAccountService
             User = existingUser.ToUserDto(),
             Token = await _tokenService.CreateToken(existingUser)
         };
+    }
+
+    public async Task<UserDto> GetProfile(ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("No user found");
+
+        return user.ToUserDto();
+    }
+
+    public async Task<UserDto> UpdateAccount(ClaimsPrincipal claimsPrincipal, UpdateUserDto updateUserDto)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null) throw new Exception("No user found");
+
+        user.FirstName = updateUserDto.FirstName;
+        user.LastName = updateUserDto.LastName;
+        user.ProfileImageUrl = updateUserDto.ProfileImageUrl;
+
+        await _userManager.UpdateAsync(user);
+
+        return user.ToUserDto();
     }
 
     public async Task<AuthResponseDto> GenRefreshToken(AppUser user)

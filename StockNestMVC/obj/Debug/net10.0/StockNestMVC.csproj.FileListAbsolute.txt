@@ -200,3 +200,15 @@ C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net1
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\obj\Debug\net10.0\StockNestMVC.csproj.AssemblyReference.cache
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\obj\Debug\net10.0\StockNestMVC.sourcelink.json
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\obj\Debug\net10.0\StockNes.2D74482F.Up2Date
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\BirdMessenger.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\MimeMapping.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Core.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Functions.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Gotrue.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Postgrest.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Realtime.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Storage.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\System.Reactive.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Websocket.Client.dll
