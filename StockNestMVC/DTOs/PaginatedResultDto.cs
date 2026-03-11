@@ -9,4 +9,6 @@ public class PaginatedResultDto<T>
     public bool? HasNextPage { get; set; }
 
     public string MyRole { get; set; }
+
+    public int TotalPagesCount { get; set; }
 }
