@@ -104,7 +104,7 @@ public class GroupService : IGroupService
 
         var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
     
-        var duplicate = await _groupRepo.CheckDuplicateGroup(user, existingGroup.Name, groupId);
+        var duplicate = await _groupRepo.CheckDuplicateGroup(user, updateGroupDto.Name, groupId);
 
         if (duplicate) throw new Exception("Group with this name already exists");
 

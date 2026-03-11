@@ -68,14 +68,14 @@ public class ItemRepository : IItemRepository
             duplicate = await _context.Items
             .AnyAsync(i =>
                 i.CategoryId == categoryId &&
-                i.Name == name);
+                i.Name.ToLower() == name.ToLower());
         }
         else
         {
             duplicate = await _context.Items
            .AnyAsync(i =>
                i.CategoryId == categoryId &&
-               i.Name == name &&
+               i.Name.ToLower() == name.ToLower() &&
                i.ItemId != itemId);
         }
 

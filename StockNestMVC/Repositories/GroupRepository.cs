@@ -104,14 +104,14 @@ public class GroupRepository : IGroupRepository
                 .Include(ug => ug.Group)
                 .AnyAsync(g =>
                     g.UserId == user.Id &&
-                    g.Group.Name == groupName &&
+                    g.Group.Name.ToLower() == groupName.ToLower() &&
                     g.GroupId != groupId);
         }
         else
         {
             duplicate = await _context.UserGroup
                .Include(ug => ug.Group)
-               .AnyAsync(g => g.UserId == user.Id && g.Group.Name == groupName);
+               .AnyAsync(g => g.UserId == user.Id && g.Group.Name.ToLower() == groupName.ToLower());
         }
 
         return duplicate;

@@ -54,7 +54,7 @@ public class ItemService : IItemService
 
     public async Task<PaginatedResultDto<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, int page, int size)
     {
-        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
+        var (user, membership) = await _userGroupService.ValidateMutationOperations(claimsPrincipal, groupId);
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
@@ -79,6 +79,7 @@ public class ItemService : IItemService
             PageNumber = page,
             PageSize = size,
             HasNextPage = hasNextPage,
+            MyRole = membership.Role
         };
     }
 
