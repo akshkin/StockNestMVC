@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StockNestMVC.Data;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using StockNestMVC.Repositories;
@@ -10,6 +12,7 @@ using StockNestMVC.Services;
 using Supabase;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,8 +104,8 @@ builder.Services.AddCors(options =>
     });
 });
 
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var app = builder.Build();
 
@@ -113,6 +116,32 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Global exception handler
+app.UseExceptionHandler("/error");
+
+//Error endpoint
+app.Map("/error", (HttpContext context) =>
+{
+    var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+    Console.WriteLine("Global handler caught: " + exception?.GetType().Name);
+
+    if (exception is AppException appEx)
+    {
+        return Results.Json(
+            new { message = appEx.Message },
+            statusCode: appEx.StatusCode
+        );
+    }
+
+    return Results.Json(
+        new { message = "Something went wrong" },
+        statusCode: 500
+    );
+});
+
+
+
 
 app.UseHttpsRedirection();
 app.UseRouting();

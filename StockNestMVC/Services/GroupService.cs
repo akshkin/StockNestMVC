@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs.Group;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace StockNestMVC.Services;
 
@@ -25,13 +25,13 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         // Check duplicate       
         var duplicate = await _groupRepo.CheckDuplicateGroup(user, createGroupDto.Name, null);
 
         if (duplicate)
-            throw new Exception("Group with the same name already exists");
+            throw new ConflictException("Group with the same name already exists");
 
         var group = new Models.Group
         {
@@ -59,7 +59,8 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var groups = await _groupRepo.GetAllUserGroups(user);
 
@@ -93,20 +94,22 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var existingGroup = await _groupRepo.GetGroupById(groupId, user);
 
         if (existingGroup == null)
         {
-            throw new Exception($"Group with id {groupId} not found");
+            throw new NotFoundException($"Group with id {groupId} not found");
         }
 
         var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
     
         var duplicate = await _groupRepo.CheckDuplicateGroup(user, updateGroupDto.Name, groupId);
 
-        if (duplicate) throw new Exception("Group with this name already exists");
+        if (duplicate)
+            throw new ConflictException("Group with this name already exists");
 
         existingGroup.Name = updateGroupDto.Name;
         existingGroup.UpdatedBy = user.Id;
@@ -125,11 +128,13 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var group = await _groupRepo.GetGroupById(groupId, user);
 
-        if (group == null) throw new Exception("Group not found");
+        if (group == null)
+            throw new NotFoundException("Group not found");
 
         string creatorName = null;
         bool isUserCreator = group.CreatedBy == user.Id;
@@ -156,7 +161,8 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var existingGroup = await _groupRepo.GetGroupById(groupId, user);
 
@@ -174,7 +180,7 @@ public class GroupService : IGroupService
         }
         else
         {
-            throw new Exception("Only the group owner can delete the group");
+            throw new ForbiddenException("Only the group owner can delete the group");
         }
 
 
@@ -185,26 +191,29 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var group = await _groupRepo.GetGroupById(groupId, user);
 
-        if (group == null) throw new Exception("Group not found");
+        if (group == null)
+            throw new NotFoundException("Group not found");
 
         var invitedUser = await _userManager.FindByEmailAsync(email);
 
-        if (invitedUser == null) throw new Exception("User with entered email address does not exist in our database");
+        if (invitedUser == null)
+            throw new NotFoundException("User with entered email address does not exist in our database");
 
         var isAlreadyMemeber = await _groupRepo.CheckIfMemberInGroup(groupId, invitedUser);
 
         if(isAlreadyMemeber)
         {
-            throw new Exception("User is already  amember of this group");
+            throw new ConflictException("User is already  amember of this group");
         }
 
         var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
 
-       
+
         if (roleInGroup == "Owner" || roleInGroup == "Co-Owner")
         {
             // Add to group
@@ -221,22 +230,24 @@ public class GroupService : IGroupService
             await _notificationRepo.NotifyAddedRemovedMember(groupId, invitedUser.Id, addedUserMessage, Enums.NotificationType.UserRemovedFromGroup);
 
             // notify other members
-            string message = $"{user.FullName} added {invitedUser.FullName} to group {group.Name}";           
+            string message = $"{user.FullName} added {invitedUser.FullName} to group {group.Name}";
             await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.UserJoinedGroup, null, null, invitedUser.Id);
         }
         else
-            throw new Exception("Only the group owner can invite users");
+            throw new ForbiddenException("Only the group owner can invite users");
     }
 
     public async Task<GroupMemberResponseDto> GetGroupMembers(int groupId, ClaimsPrincipal claimsPrincipal)
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var userGroup = await _groupRepo.GetUserGroup(groupId, user);
 
-        if (userGroup == null) throw new Exception("Group not found");
+        if (userGroup == null)
+            throw new NotFoundException("Group not found");
 
         var members = await _groupRepo.GetGroupMembers(groupId, user);
 
@@ -259,20 +270,24 @@ public class GroupService : IGroupService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null)
+            throw new UnauthorizedException("User not found");
 
         var userGroup = await _groupRepo.GetUserGroup(groupId, user);
 
-        if (userGroup == null) throw new Exception("Group not found");
+        if (userGroup == null)
+            throw new NotFoundException("Group not found");
 
         var member = await _userManager.FindByIdAsync(userId);
 
-        if (member == null) throw new Exception("User does not exist");
+        if (member == null)
+            throw new NotFoundException("User does not exist");
 
         // check if user is a member of the group
         var membership = await _groupRepo.GetUserGroup(groupId, member);
 
-        if (membership == null) throw new Exception("User is not a member of this group");
+        if (membership == null)
+            throw new NotFoundException("User is not a member of this group");
 
         var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
 
@@ -291,6 +306,6 @@ public class GroupService : IGroupService
             await _groupRepo.RemoveGroupMember(groupId, membership);
         }
         else
-            throw new Exception("Only the group owner can delete users");
+            throw new ForbiddenException("Only the group owner can delete users");
     }
 }
