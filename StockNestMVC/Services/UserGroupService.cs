@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using System.Security.Claims;
 
 namespace StockNestMVC.Services;
 
-public class UserGroupService
+public class UserGroupService : IUserGroupService
 {
         private readonly UserManager<AppUser> _userManager;
         private readonly IGroupRepository _groupRepo;
@@ -20,10 +21,13 @@ public class UserGroupService
             ClaimsPrincipal principal, int groupId)
         {
             var user = await _userManager.GetUserAsync(principal);
-            if (user == null) throw new Exception("User not found");
+            if (user == null)
+                throw new UnauthorizedException("User not found");
 
             var membership = await _groupRepo.GetUserGroup(groupId, user);
-            if (membership == null) throw new Exception("You are not a member of this group");
+            if (membership == null)
+                throw new ForbiddenException("You are not a member of this group");
+
 
             return (user, membership);
         }
@@ -34,7 +38,7 @@ public class UserGroupService
             var (user, membership) = await ValidateMembership(principal, groupId);
 
             if (membership.Role == "Viewer")
-                throw new Exception("You do not have the permission to create, edit or delete");
+                throw new ForbiddenException("You do not have the permission to create, edit or delete");
 
             return (user, membership);
         }

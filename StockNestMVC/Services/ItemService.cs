@@ -13,10 +13,10 @@ public class ItemService : IItemService
     private readonly UserManager<AppUser> _userManager;
     private readonly IItemRepository _itemRepo;
     private readonly ICategoryRepository _categoryRepo;
-    private readonly UserGroupService _userGroupService;
+    private readonly IUserGroupService _userGroupService;
     private readonly INotificationRepository _notificationService;
 
-    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, UserGroupService userGroupService, INotificationRepository notificationService)
+    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, IUserGroupService userGroupService, INotificationRepository notificationService)
     {
         _userManager = userManager;
         _itemRepo = itemRepo;
@@ -54,7 +54,7 @@ public class ItemService : IItemService
 
     public async Task<PaginatedResultDto<ItemDto>> GetAll(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, int page, int size)
     {
-        var (user, membership) = await _userGroupService.ValidateMutationOperations(claimsPrincipal, groupId);
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 

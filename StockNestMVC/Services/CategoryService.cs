@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs.Category;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
@@ -13,29 +14,33 @@ public class CategoryService : ICategoryService
     private readonly ICategoryRepository _categoryRepo;
     private readonly IGroupRepository _groupRepo;
     private readonly INotificationRepository _notificationRepo;
+    private readonly IUserGroupService _userGroupService;
 
-    public CategoryService(UserManager<AppUser> userManager, ICategoryRepository categoryRepo, IGroupRepository groupRepo, INotificationRepository notificationRepo)
+    public CategoryService(UserManager<AppUser> userManager, 
+        ICategoryRepository categoryRepo, 
+        IGroupRepository groupRepo, 
+        INotificationRepository notificationRepo, 
+        IUserGroupService userGroupService
+    )
     {
         _userManager = userManager;
         _categoryRepo = categoryRepo;
         _groupRepo = groupRepo;
         _notificationRepo = notificationRepo;
+        _userGroupService = userGroupService;
     }
 
     public async Task<CategoryDto> CreateCategory(int groupId, ClaimsPrincipal claimsPrincipal, CreateCategoryDto createCategoryDto)
     {
-        var user = await _userManager.GetUserAsync(claimsPrincipal);
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
-        if (user == null) throw new Exception("User not found");
-
-        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
-
-        if (userRole == "Viewer") throw new Exception("You do not have permission to create categories");
+        if (membership.Role == "Viewer") 
+             throw new ForbiddenException("You do not have permission to create categories");
 
         var duplicate = await _categoryRepo.CheckDuplicate(groupId, createCategoryDto.Name, null);
 
         if (duplicate)
-            throw new Exception("A category with this name already exists in the group");
+            throw new ConflictException("A category with this name already exists in the group");
 
         var newCategory = new Category
         {
@@ -56,14 +61,7 @@ public class CategoryService : ICategoryService
 
     public async Task<IEnumerable<CategoryDto>> GetCategoriesInGroup(int groupId, ClaimsPrincipal claimsPrincipal)
     {
-        var user = await _userManager.GetUserAsync(claimsPrincipal);
-
-        if (user == null) throw new Exception("User not found");
-
-        //check if user belongs to this group
-        var membership = await _groupRepo.GetUserGroup(groupId, user);
-
-        if (membership == null) throw new Exception("You are not a member of this group");
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
         var categories = await _categoryRepo.GetCategoriesInGroup(groupId);
 
@@ -71,7 +69,7 @@ public class CategoryService : ICategoryService
 
         foreach(Category category in categories)
         {
-            var (creatorName, updatorName) = await GetCreatorUpdatorNames(category, user);
+            (string? creatorName, string? updatorName) = await GetCreatorUpdatorNames(category, user);
             categoryDtos.Add(category.ToCategoryDto(creatorName, updatorName));
         }
 
@@ -80,32 +78,34 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryDto?> GetCategoryById(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal)
     {
-        var (user, membership) = await ValidateMembership(groupId, claimsPrincipal);
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category was not found");
+        if (category == null)
+            throw new NotFoundException("Category not found");
 
-        var (creatorName, updatorName) = await GetCreatorUpdatorNames(category, user);
+        (string ? creatorName, string? updatorName) = await GetCreatorUpdatorNames(category, user);
 
         return category.ToCategoryDto(creatorName, updatorName);
     }
 
     public async Task<CategoryDto?> UpdateCategory(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal, CreateCategoryDto updateCategoryDto)
     {
-        var (user, membership) = await ValidateMembership(groupId, claimsPrincipal);
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category was not found");
+        if (category == null)
+            throw new NotFoundException("Category not found");
 
-        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
-
-        if (userRole == "Viewer") throw new Exception("You do not have permission to update categories");
+        if (membership.Role == "Viewer")
+            throw new ForbiddenException("You do not have permission to update categories");
 
         var duplicate = await _categoryRepo.CheckDuplicate(groupId, updateCategoryDto.Name, categoryId);
 
-        if (duplicate) throw new Exception("A category with this name already exists in the group");
+        if (duplicate)
+            throw new ConflictException("A category with this name already exists in the group");
 
         category.Name = updateCategoryDto.Name;
         category.UpdatedAt = DateTime.UtcNow;
@@ -124,15 +124,15 @@ public class CategoryService : ICategoryService
 
     public async Task<CategoryDto?> DeleteCategory(int groupId, int categoryId, ClaimsPrincipal claimsPrincipal)
     {
-        var (user, membership) = await ValidateMembership(groupId, claimsPrincipal);
+        var (user, membership) = await _userGroupService.ValidateMembership(claimsPrincipal, groupId);
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category was not found");
+        if (category == null)
+            throw new NotFoundException("Category was not found");
 
-        var userRole = await _groupRepo.GetRoleInGroup(groupId, user);
-
-        if (userRole == "Viewer") throw new Exception("You do not have permission to delete categories");
+        if (membership.Role == "Viewer")
+            throw new NotFoundException("You do not have permission to delete categories");
 
         await _categoryRepo.DeleteCategory(category);
 
@@ -143,19 +143,6 @@ public class CategoryService : ICategoryService
         await _notificationRepo.NotifyGroupMembers(groupId, user.Id, message, Enums.NotificationType.CategoryDeleted);
 
         return category.ToCategoryDto(category.CreatedBy, category.UpdatedBy);
-    }
-
-    private async Task<(AppUser user, UserGroup membership)> ValidateMembership(int groupId, ClaimsPrincipal claimsPrincipal)
-    {
-        var user = await _userManager.GetUserAsync(claimsPrincipal);
-
-        if (user == null) throw new Exception("User not found");
-
-        var membership = await _groupRepo.GetUserGroup(groupId, user);
-
-        if (membership == null) throw new Exception("You are not a member of this group");
-
-        return (user, membership);
     }
 
     private async Task<(string? createdBy, string? updatedBy)> GetCreatorUpdatorNames(Category category, AppUser currentUser)
