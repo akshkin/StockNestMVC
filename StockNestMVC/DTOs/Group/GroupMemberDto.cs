@@ -11,4 +11,6 @@ public class GroupMemberDto
 
     public bool IsMe { get; set; }
 
+    public string ProfileImageUrl { get; set; }
+
 }

@@ -27,7 +27,8 @@ public static class GroupMapper
             FullName = user.FullName,
             Role = role,
             Email = user.Email,
-            IsMe = isMe
+            IsMe = isMe,
+            ProfileImageUrl = user.ProfileImageUrl
         };
     }
 }
