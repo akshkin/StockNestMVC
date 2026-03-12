@@ -92,6 +92,7 @@ builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
 
 builder.Services.AddCors(options =>
 {

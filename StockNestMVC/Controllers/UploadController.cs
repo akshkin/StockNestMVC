@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using StockNestMVC.Interfaces;
 using System.Security.Claims;
 
 namespace StockNestMVC.Controllers;
@@ -10,39 +11,18 @@ namespace StockNestMVC.Controllers;
 [Authorize]
 public class UploadController : ControllerBase
 {
-    private readonly Models.MySupabaseOptions _supabase;
+    private readonly IUploadService _uploadService;
 
-
-    public UploadController(IOptions<Models.MySupabaseOptions> supabase)
+    public UploadController(IUploadService uploadService)
     {
-        _supabase = supabase.Value;
+        _uploadService = uploadService;
     }
 
     [HttpGet("upload-image")]
     public async Task<IActionResult> GetSignedUrl()
     {
-        try
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var uploadResponse = await _uploadService.GetSignedUrl(User);
 
-            if (userId == null) return Unauthorized("User not found");
-
-            var fileName = $"{Guid.NewGuid()}.png";
-            var filePath = $"{userId}/{fileName}";
-
-            // Supabase client
-            var client = new Supabase.Client(_supabase.Url, _supabase.SecretKey);
-
-            // Generate signed upload URL
-            var signedUrl = await client.Storage
-                .From(_supabase.Bucket)
-                .CreateUploadSignedUrl(filePath);
-
-            return Ok(new { signedUrl, filePath, bucket = _supabase.Bucket });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(uploadResponse);
     }
 }
