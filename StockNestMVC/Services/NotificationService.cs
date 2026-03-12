@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.Notification;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
@@ -23,7 +24,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         var (notifications, total) = await _notificationRepo.GetAllNotifications(user.Id, page, size);
 
@@ -43,7 +44,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         var (notifications, total) = await _notificationRepo.GetUnreadNotifications(user.Id, page, size);
 
@@ -64,7 +65,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         await _notificationRepo.SetAllNotificationsAsSeen(user.Id);
 
@@ -74,7 +75,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         await _notificationRepo.SetNotificationAsSeen(notificationId, user.Id);
     }
@@ -83,7 +84,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         var notifications = await _notificationRepo.GetLatestNotifications(7, user.Id);
 
@@ -94,7 +95,7 @@ public class NotificationService : INotificationService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         int count = await _notificationRepo.GetUnreadNotificationsCount(user.Id);
         return count;

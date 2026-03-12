@@ -20,15 +20,8 @@ public class SearchController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Search(string query)
     {
-        try
-        {
-            var results = await _searchService.GetSearchResults(User, query);
-            return Ok(results);
-        }
-        catch (Exception ex) 
-        { 
-            return BadRequest(ex.Message);
-        }
+        var results = await _searchService.GetSearchResults(User, query);
+        return Ok(results);
     }
  
 }

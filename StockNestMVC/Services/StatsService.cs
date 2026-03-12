@@ -3,6 +3,7 @@ using StockNestMVC.DTOs.Stats;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using System.Security.Claims;
+using StockNestMVC.Exceptions;
 
 namespace StockNestMVC.Services;
 
@@ -22,6 +23,9 @@ public class StatsService : IStatsService
     public async Task<StatsDto> GetGroupStats(ClaimsPrincipal principal)
     {
         var user = await _userManager.GetUserAsync(principal);
+
+        if (user == null) throw new UnauthorizedException("User not found");
+
         var totalGroups = await _statsRepo.CountGroups(user);
         var totalCategories = await _statsRepo.CountCategories(user);
         var totalItems = await _statsRepo.CountItems(user);

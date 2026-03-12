@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using System.Security.Claims;
@@ -29,7 +30,7 @@ public class SearchService : ISearchService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedException("User not found");
 
         var groups = await _groupRepo.GetSearchResult(user, searchTerm);
         var categories = await _categoryRepo.GetSearchResult(user,searchTerm);

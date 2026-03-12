@@ -18,14 +18,7 @@ public class StatsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetStats()
     {
-        try
-        {
-            var stats = await _statsService.GetGroupStats(User);
-            return Ok(stats);
-        }
-        catch (Exception ex) 
-        {
-                return BadRequest(ex.Message);
-        }
+        var stats = await _statsService.GetGroupStats(User);
+        return Ok(stats);
     }
 }

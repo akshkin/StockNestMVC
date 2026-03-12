@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using StockNestMVC.Data;
 using System.Security.Claims;
 
 namespace StockNestMVC.Controllers;
@@ -16,9 +15,6 @@ public class UploadController : ControllerBase
 
     public UploadController(IOptions<Models.MySupabaseOptions> supabase)
     {
-        //_supabaseUrl = config["Supabase:Url"];
-        //_supabaseServiceRoleKey = config["Supabase:SecretKey"];
-        //_context = context;
         _supabase = supabase.Value;
     }
 
@@ -28,7 +24,7 @@ public class UploadController : ControllerBase
         try
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Console.WriteLine("user" + userId);
+
             if (userId == null) return Unauthorized("User not found");
 
             var fileName = $"{Guid.NewGuid()}.png";
