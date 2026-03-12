@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.Interfaces;
-using System.Drawing;
 
 namespace StockNestMVC.Controllers;
 
@@ -19,88 +18,46 @@ public class NotificationsController : ControllerBase
 
     [HttpGet("all")]
     public async Task<IActionResult> GetAllNotifications(int page = 1, int size = 10)
-    {
-        try
-        {
-            var notifications = await _notificationService.GetAllNotifications(User, page, size);
+    {        
+        var notifications = await _notificationService.GetAllNotifications(User, page, size);
 
-            return Ok(notifications);
-        }
-        catch (Exception ex) 
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(notifications);       
     }
 
     [HttpGet("unread")]
     public async Task<IActionResult> GetUnreadNotifications(int page = 1, int size = 10)
-    {
-        try
-        {
-            var unreadNotifications = await _notificationService.GetUnreadNotifications(User, page, size);
-            return Ok(unreadNotifications);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    {       
+        var unreadNotifications = await _notificationService.GetUnreadNotifications(User, page, size);
+        return Ok(unreadNotifications);
     }
 
     [HttpPost("{notificationId}/seen")]
     public async Task<IActionResult> SetNotificationAsSeen(int notificationId)
     {
-        try
-        {
-            await _notificationService.SetNotificationAsSeen(notificationId, User);
+        await _notificationService.SetNotificationAsSeen(notificationId, User);
 
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok();
     }
 
     [HttpPost("seenAll")]
     public async Task<IActionResult> SetAllNotificationsAsSeen()
     {
-        try
-        {
-            await _notificationService.SetAllNotificationsAsSeen(User);
+        await _notificationService.SetAllNotificationsAsSeen(User);
 
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok();
     }
 
     [HttpGet("latest")]
     public async Task<IActionResult> GetLatestNotifications()
     {
-        try
-        {
-            var notifications = await _notificationService.GetLatestNotifications(User);
-            return Ok(notifications);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var notifications = await _notificationService.GetLatestNotifications(User);
+        return Ok(notifications);
     }
 
     [HttpGet("unread-count")]
     public async Task<IActionResult> GetUnreadNotificationsCount()
     {
-        try
-        {
-            int count = await _notificationService.GetUnreadNotificationsCount(User);
-            return Ok(count);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        int count = await _notificationService.GetUnreadNotificationsCount(User);
+        return Ok(count);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.Item;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
@@ -13,10 +14,10 @@ public class ItemService : IItemService
     private readonly UserManager<AppUser> _userManager;
     private readonly IItemRepository _itemRepo;
     private readonly ICategoryRepository _categoryRepo;
-    private readonly UserGroupService _userGroupService;
+    private readonly IUserGroupService _userGroupService;
     private readonly INotificationRepository _notificationService;
 
-    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, UserGroupService userGroupService, INotificationRepository notificationService)
+    public ItemService(UserManager<AppUser> userManager, IItemRepository itemRepo, ICategoryRepository categoryRepo, IUserGroupService userGroupService, INotificationRepository notificationService)
     {
         _userManager = userManager;
         _itemRepo = itemRepo;
@@ -31,7 +32,8 @@ public class ItemService : IItemService
     
         var duplicate = await _itemRepo.CheckDuplicateItem(categoryId, createItemDto.Name, null);
 
-        if (duplicate) throw new Exception("An item with the same name already exists in the category");
+        if (duplicate) 
+            throw new ConflictException("An item with the same name already exists in the category");
 
         var item = new Item
         {
@@ -58,7 +60,8 @@ public class ItemService : IItemService
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category not found");
+        if (category == null) 
+            throw new NotFoundException("Category not found");
 
         var (items, total) = await _itemRepo.GetAll(groupId, categoryId, page, size);
 
@@ -71,7 +74,9 @@ public class ItemService : IItemService
         }
 
         bool hasNextPage = (page * size) < total;
-        //return itemsDto;
+
+        int totalPages = (int)Math.Ceiling((double)total / size); ;
+
         return new PaginatedResultDto<ItemDto>
         {
             Items = itemsDto,
@@ -79,6 +84,8 @@ public class ItemService : IItemService
             PageNumber = page,
             PageSize = size,
             HasNextPage = hasNextPage,
+            MyRole = membership.Role,
+            TotalPagesCount = totalPages
         };
     }
 
@@ -88,11 +95,13 @@ public class ItemService : IItemService
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category not found");
+        if (category == null) 
+            throw new NotFoundException("Category not found");
 
         var item = await _itemRepo.GetItemById(categoryId, itemId);
 
-        if (item == null) throw new Exception("Item was not found");
+        if (item == null) 
+            throw new NotFoundException("Item was not found");
 
         var (creator, updator) = await GetCreatorUpdatorNames(item, user);
 
@@ -105,15 +114,18 @@ public class ItemService : IItemService
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category not found");
+        if (category == null) 
+            throw new NotFoundException("Category not found");
 
         var item = await _itemRepo.GetItemById(categoryId, itemId);
 
-        if (item == null) throw new Exception("Item was not found");
+        if (item == null) 
+            throw new NotFoundException("Item was not found");
 
         var duplicate = await _itemRepo.CheckDuplicateItem(categoryId, updateItemDto.Name, itemId);
 
-        if (duplicate) throw new Exception("Item with the same name already exists in this category");
+        if (duplicate) 
+            throw new ConflictException("Item with the same name already exists in this category");
 
         item.Name = updateItemDto.Name;
         item.Quantity = updateItemDto.Quantity;
@@ -135,7 +147,8 @@ public class ItemService : IItemService
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category not found");
+        if (category == null) 
+            throw new NotFoundException("Category not found");
 
         var items = await _itemRepo.DeleteItem(itemIds);
 
@@ -171,7 +184,8 @@ public class ItemService : IItemService
 
         var category = await _categoryRepo.GetCategoryById(groupId, categoryId);
 
-        if (category == null) throw new Exception("Category not found");
+        if (category == null) 
+            throw new NotFoundException("Category not found");
 
         var pageIndex = await _itemRepo.GetItemPageIndex(user, categoryId, itemId);
 

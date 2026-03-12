@@ -57,14 +57,14 @@ public class CategoryRepository : ICategoryRepository
         {
             duplicate = await _context.Categories
            .AnyAsync(c =>
-           c.GroupId == groupId &&
-           c.Name == name &&
-           c.CategoryId != categoryId);
+               c.GroupId == groupId &&
+               c.Name.ToLower() == name.ToLower() &&
+               c.CategoryId != categoryId);
         } 
         else // for create 
         {
             duplicate = await _context.Categories
-           .AnyAsync(c => c.GroupId == groupId && c.Name == name);
+           .AnyAsync(c => c.GroupId == groupId && c.Name.ToLower() == name.ToLower());
         }
         return duplicate;
     }
