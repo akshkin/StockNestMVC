@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.User;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Mappers;
 using StockNestMVC.Models;
@@ -23,7 +25,7 @@ public class AccountService : IAccountService
         _userRepo = userRepo;
     }
 
-    public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto)
+    public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto, HttpContext http)
     {
         try
         {
@@ -39,29 +41,34 @@ public class AccountService : IAccountService
                     User = userDto,
                     Token = await _tokenService.CreateToken(newUser)
                 };
+                await GenerateTokens(newUser, http);
                 return userWithToken;
             }
             else
             {
                 var errors = createdUser.Errors.Select(e => e.Description);
-                throw new Exception(string.Join(", ", errors));
+                throw new BadRequestException(string.Join(", ", errors));
             }
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+            throw new BadRequestException(ex.Message);
         }
     }
 
-    public async Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto)
+    public async Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto, HttpContext http)
     {
         var existingUser = await _userManager.FindByEmailAsync(loginUserDto.Email);
 
-        if (existingUser == null) return null;
+        if (existingUser == null) 
+            throw new UnauthorizedException("Invalid email or password");
 
         var passwordConfirmed = await _signInManager.CheckPasswordSignInAsync(existingUser, loginUserDto.Password, false);
 
-        if (!passwordConfirmed.Succeeded) return null;
+        if (!passwordConfirmed.Succeeded)
+            throw new UnauthorizedException("Invalid email or password");
+
+        await GenerateTokens(existingUser, http);
 
         return new UserWithTokenDto
         {
@@ -70,11 +77,54 @@ public class AccountService : IAccountService
         };
     }
 
+    public async Task Refresh(string refreshToken, HttpContext http)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);        
+
+        if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+        {
+            throw new UnauthorizedException("Invalid or expired refresh token");
+        }
+        else
+        {
+            await GenerateTokens(user, http);
+        }
+    }
+
+    public async Task Logout(string refreshToken, HttpContext http)
+    {
+        if (refreshToken == null) throw new UnauthorizedException("Missing refresh token");
+        
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        if (user == null) throw new UnauthorizedException("User not found");
+
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = DateTime.MinValue;
+        await RemoveRefreshToken(user);
+        await _userManager.UpdateAsync(user);
+        
+        http.Response.Cookies.Delete("accessToken");
+        http.Response.Cookies.Delete("refreshToken");
+    }
+
+    public async Task<CurrentUserDto> Me(ClaimsPrincipal claimsPrincipal)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+        if (user == null) throw new  UnauthorizedException("No user found");
+
+        return new CurrentUserDto
+        { 
+            User = claimsPrincipal.Identity.IsAuthenticated, 
+            Name = user.FirstName 
+        };
+    }
+
     public async Task<UserDto> GetProfile(ClaimsPrincipal claimsPrincipal)
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("No user found");
+        if (user == null) 
+            throw new UnauthorizedException("No user found");
 
         return user.ToUserDto();
     }
@@ -83,7 +133,8 @@ public class AccountService : IAccountService
     {
         var user = await _userManager.GetUserAsync(claimsPrincipal);
 
-        if (user == null) throw new Exception("No user found");
+        if (user == null) 
+            throw new UnauthorizedException("No user found");
 
         user.FirstName = updateUserDto.FirstName;
         user.LastName = updateUserDto.LastName;
@@ -111,5 +162,33 @@ public class AccountService : IAccountService
     public async Task RemoveRefreshToken(AppUser user)
     {
         await _userRepo.Logout(user);
+    }
+
+    private async Task GenerateTokens(AppUser user, HttpContext http)
+    {
+        var authResponse = await GenRefreshToken(user);
+        var newAccessToken = authResponse.AccessToken;
+        var newRefreshToken = authResponse.RefreshToken;
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+
+        await _userManager.UpdateAsync(user);
+
+        http.Response.Cookies.Append("accessToken", newAccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTime.UtcNow.AddMinutes(15)
+        });
+
+        http.Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTime.UtcNow.AddDays(1) // change later to 2 days?           
+        });
     }
 }
