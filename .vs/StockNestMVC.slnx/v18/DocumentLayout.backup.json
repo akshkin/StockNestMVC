@@ -49,16 +49,8 @@
               "IsPinned": true
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ItemService.cs",
-              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
-              "RelativeDocumentMoniker": "StockNestMVC\\Services\\ItemService.cs",
-              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
-              "RelativeToolTip": "StockNestMVC\\Services\\ItemService.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-12T10:20:47.046Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -72,10 +64,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-12T10:19:37.344Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -112,6 +100,18 @@
               "ViewState": "AgIAAHMAAAAAAAAAAAAcwH0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-09T13:26:58.399Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ItemService.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Services\\ItemService.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
+              "RelativeToolTip": "StockNestMVC\\Services\\ItemService.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-12T10:20:47.046Z"
             },
             {
               "$type": "Bookmark",

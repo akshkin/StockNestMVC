@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\services\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\services\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\services\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|solutionrelative:stocknestmvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D528F277-C756-59C0-5271-7C7EAED19003}|StockNestMVC\\StockNestMVC.csproj|c:\\users\\aksh\\documents\\lexicon\\c-sharp\\stocknestmvc\\stocknestmvc\\services\\uploadservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,7 +33,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -58,7 +58,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "NotificationService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\NotificationService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Services\\NotificationService.cs",
@@ -68,18 +68,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-12T10:19:37.344Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UploadService.cs",
-              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\UploadService.cs",
-              "RelativeDocumentMoniker": "StockNestMVC\\Services\\UploadService.cs",
-              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\UploadService.cs",
-              "RelativeToolTip": "StockNestMVC\\Services\\UploadService.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAACQAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-12T09:49:43.04Z"
             },
             {
               "$type": "Document",
@@ -95,19 +83,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Program.cs",
               "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
               "RelativeToolTip": "StockNestMVC\\Program.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAcwH0AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAcwG4AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T13:26:58.399Z"
+              "WhenOpened": "2026-03-09T13:26:58.399Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ItemService.cs",
               "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\ItemService.cs",
               "RelativeDocumentMoniker": "StockNestMVC\\Services\\ItemService.cs",
@@ -116,6 +105,18 @@
               "ViewState": "AgIAAD4AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-12T10:20:47.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UploadService.cs",
+              "DocumentMoniker": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\UploadService.cs",
+              "RelativeDocumentMoniker": "StockNestMVC\\Services\\UploadService.cs",
+              "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Services\\UploadService.cs",
+              "RelativeToolTip": "StockNestMVC\\Services\\UploadService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACQAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-12T09:49:43.04Z"
             }
           ]
         }
