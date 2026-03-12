@@ -53,13 +53,16 @@ public class NotificationService : INotificationService
 
         bool HasNextPage = (page * size) < total;
 
+        int totalPages = (int)Math.Ceiling((double)total / size);
+
         return new PaginatedResultDto<NotificationDto>
         {
             Items = notifications.Select(n => n.ToNotificationDto()),
             TotalCount = total,
             PageNumber = page,
             PageSize = size,
-            HasNextPage = HasNextPage
+            HasNextPage = HasNextPage,
+            TotalPagesCount = totalPages
         };
 
     }
