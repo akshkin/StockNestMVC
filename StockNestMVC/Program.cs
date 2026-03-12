@@ -7,6 +7,7 @@ using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using StockNestMVC.Repositories;
 using StockNestMVC.Services;
+using Supabase;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 
@@ -68,6 +69,9 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
+
+builder.Services.Configure<MySupabaseOptions>(
+    builder.Configuration.GetSection("Supabase"));
 
 
 builder.Services.AddScoped<ITokenService, TokenService>();

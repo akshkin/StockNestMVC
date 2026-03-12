@@ -37,6 +37,16 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.AccountController",
+    "Method": "GetProfile",
+    "RelativePath": "api/Account/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.AccountController",
     "Method": "Refresh",
     "RelativePath": "api/Account/refresh",
     "HttpMethod": "GET",
@@ -56,6 +66,22 @@
       {
         "Name": "registerDto",
         "Type": "StockNestMVC.DTOs.User.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.AccountController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/Account/update-profile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateUserDto",
+        "Type": "StockNestMVC.DTOs.User.UpdateUserDto",
         "IsRequired": true
       }
     ],
@@ -577,6 +603,16 @@
     "ContainingType": "StockNestMVC.Controllers.StatsController",
     "Method": "GetStats",
     "RelativePath": "api/Stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.UploadController",
+    "Method": "GetSignedUrl",
+    "RelativePath": "api/Upload/upload-image",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
