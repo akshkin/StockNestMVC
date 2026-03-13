@@ -98,7 +98,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://akshkin.github.io/", "http://localhost:5173")
+        var allowedOrigins = new[] { "https://akshkin.github.io", "http://localhost:5173" };
+
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();  // needed if using cookies
