@@ -30,10 +30,19 @@ public class ItemService : IItemService
     {
         var (user, membership) = await _userGroupService.ValidateMutationOperations(claimsPrincipal, groupId);
     
-        var duplicate = await _itemRepo.CheckDuplicateItem(categoryId, createItemDto.Name, null);
+        var duplicateItem = await _itemRepo.GetDuplicateItem(categoryId, createItemDto.Name, null);
 
-        if (duplicate) 
-            throw new ConflictException("An item with the same name already exists in the category");
+        if (duplicateItem != null) 
+        { 
+            throw new ConflictException(
+                "An item with the same name already exists in the category",
+                new
+                {
+                    existingItem = duplicateItem.ToItemDto(duplicateItem.CreatedBy, duplicateItem.UpdatedBy)
+                }                
+            ); 
+        
+        }
 
         var item = new Item
         {

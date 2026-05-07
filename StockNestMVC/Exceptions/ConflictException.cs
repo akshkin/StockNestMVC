@@ -2,5 +2,5 @@
 
 public class ConflictException : AppException
 {
-    public ConflictException(string message) : base(message, 409) { }
+    public ConflictException(string message, object? data = null) : base(message, 409, data) { }
 }

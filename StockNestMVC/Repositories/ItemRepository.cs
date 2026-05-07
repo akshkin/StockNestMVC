@@ -82,6 +82,21 @@ public class ItemRepository : IItemRepository
         return duplicate;
     }
 
+    public async Task<Item?> GetDuplicateItem(int categoryId, string name, int? itemId = null)
+    {
+        var query = _context.Items
+            .Where(i =>
+                i.CategoryId == categoryId &&
+                i.Name.ToLower() == name.ToLower());
+
+        if (itemId != null)
+        {
+            query = query.Where(i => i.ItemId != itemId);
+        }
+
+        return await query.FirstOrDefaultAsync();
+    }
+
     public async Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm)
     {
         var items = await _context.Items

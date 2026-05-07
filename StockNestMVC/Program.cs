@@ -136,7 +136,11 @@ app.Map("/error", (HttpContext context) =>
     if (exception is AppException appEx)
     {
         return Results.Json(
-            new { message = appEx.Message },
+            new 
+            { 
+                message = appEx.Message ,
+                payload = appEx.DataPayload
+            },
             statusCode: appEx.StatusCode
         );
     }

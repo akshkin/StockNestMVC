@@ -16,6 +16,8 @@ public interface IItemRepository
 
     public Task<bool> CheckDuplicateItem(int categoryId, string name, int? itemId);
 
+    public Task<Item?> GetDuplicateItem(int categoryId, string name, int? itemId = null);
+
     public Task<IEnumerable<SearchResultDto>> GetSearchResult(AppUser user, string searchTerm);
 
     public Task<int> GetItemPageIndex(AppUser user, int categoryId, int itemId);
