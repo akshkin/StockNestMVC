@@ -1,6 +1,8 @@
 # StockNest - Inventory & Stock Management System  
 A full‑stack inventory management application built with **ASP.NET Core MVC**, **Entity Framework Core**, **PostgreSQL**, and a **React frontend** with authentication, dashboards, metrics
 
+The frontend code can be found [here](https://github.com/akshkin/StockNestReact)
+
 ## Features
 
 ### Authentication & Authorization
