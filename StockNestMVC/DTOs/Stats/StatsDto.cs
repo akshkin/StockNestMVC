@@ -1,4 +1,6 @@
-﻿namespace StockNestMVC.DTOs.Stats;
+﻿using StockNestMVC.DTOs.Notification;
+
+namespace StockNestMVC.DTOs.Stats;
 
 public class StatsDto
 {
@@ -14,5 +16,7 @@ public class StatsDto
 
         public List<ItemsPerCategoryDto> TopCategories { get; set; }
         public List<ItemsPerCategoryDto> ItemsPerGroup { get; set; }
+
+        public IEnumerable<NotificationDto> LatestNotifications { get; set; }
 
 }
