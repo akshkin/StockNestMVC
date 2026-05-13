@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using StockNestMVC.DTOs.Stats;
+using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using System.Security.Claims;
-using StockNestMVC.Exceptions;
 
 namespace StockNestMVC.Services;
 
@@ -11,13 +11,17 @@ public class StatsService : IStatsService
 {
     private readonly IStatsRepository _statsRepo;
     private readonly UserManager<AppUser> _userManager;
+    private readonly INotificationService _notificationService;
 
     public StatsService(
         IStatsRepository statsRepo,
-        UserManager<AppUser> userManager)
+        UserManager<AppUser> userManager,
+        INotificationService notificationService)
+        
     {
         _statsRepo = statsRepo;
         _userManager = userManager;
+        _notificationService = notificationService;
     }
 
     public async Task<StatsDto> GetGroupStats(ClaimsPrincipal principal)
@@ -36,6 +40,8 @@ public class StatsService : IStatsService
         var itemsPerGroup = await _statsRepo.GetItemsPerGroup(user);
         var topCategories = await _statsRepo.GetTopCategories(user);
 
+        var latestNotifications = await _notificationService.GetLatestNotifications(principal);
+
         return new StatsDto
         {
             TotalGroups = totalGroups,
@@ -44,7 +50,8 @@ public class StatsService : IStatsService
             UserCreatedItems = userCreatedItems,
             UserUpdatedItems = userUpdatedItems,
             ItemsPerGroup = itemsPerGroup,
-            TopCategories = topCategories
+            TopCategories = topCategories,
+            LatestNotifications = latestNotifications
         };
     }
     
