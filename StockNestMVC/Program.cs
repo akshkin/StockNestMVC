@@ -98,7 +98,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var allowedOrigins = new[] { "https://akshkin.github.io", "http://localhost:5173" };
+        var allowedOrigins = new[] { "https://akshkin.github.io", "http://localhost:5173", "http://localhost:4173" };
 
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()

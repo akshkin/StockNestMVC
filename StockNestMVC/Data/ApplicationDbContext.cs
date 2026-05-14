@@ -23,6 +23,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
     public DbSet<Notification> Notifications { get; set; }
 
+    public DbSet<UserSession> UserSessions { get; set; } 
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
