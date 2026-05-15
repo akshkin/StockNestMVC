@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Uo3RqHtzWs8=",
+  "dgSpecHash": "Ht36L71e/2U=",
   "success": true,
   "projectFilePath": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\StockNestMVC.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aksh\\.nuget\\packages\\birdmessenger\\3.1.4\\birdmessenger.3.1.4.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\aksh\\.nuget\\packages\\maxmind.db\\4.3.4\\maxmind.db.4.3.4.nupkg.sha512",
+    "C:\\Users\\aksh\\.nuget\\packages\\maxmind.geoip2\\5.4.1\\maxmind.geoip2.5.4.1.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.3\\microsoft.aspnetcore.authentication.jwtbearer.10.0.3.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\10.0.3\\microsoft.aspnetcore.identity.entityframeworkcore.10.0.3.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\10.0.3\\microsoft.aspnetcore.jsonpatch.10.0.3.nupkg.sha512",
@@ -54,6 +56,7 @@
     "C:\\Users\\aksh\\.nuget\\packages\\system.composition.typedparts\\9.0.0\\system.composition.typedparts.9.0.0.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.0.1\\system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\system.reactive\\6.0.0\\system.reactive.6.0.0.nupkg.sha512",
+    "C:\\Users\\aksh\\.nuget\\packages\\uaparser\\3.1.47\\uaparser.3.1.47.nupkg.sha512",
     "C:\\Users\\aksh\\.nuget\\packages\\websocket.client\\5.1.1\\websocket.client.5.1.1.nupkg.sha512"
   ],
   "logs": []

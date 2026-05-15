@@ -9,10 +9,8 @@ using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using StockNestMVC.Repositories;
 using StockNestMVC.Services;
-using Supabase;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +93,7 @@ builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddScoped<IUserSessionService, UserSessionService>();
+builder.Services.AddScoped<GeoService>();
 
 builder.Services.AddCors(options =>
 {

@@ -10,7 +10,7 @@ namespace StockNestMVC.Interfaces
 
         public Task<List<UserSession>> GetUserSessionsAsync(string userId);
 
-        public Task RevokeSessionAsync(int sessionId);
+        public Task RevokeSessionAsync(int sessionId, string userId);
 
         public Task RevokeAllUserSessionsAsync(string userId, int? exceptSessionId = null);
 

@@ -600,6 +600,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "StockNestMVC.Controllers.SessionsController",
+    "Method": "GetAllSessions",
+    "RelativePath": "api/Sessions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.SessionsController",
+    "Method": "RevokeSession",
+    "RelativePath": "api/Sessions/revoke/{sessionId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sessionId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "StockNestMVC.Controllers.StatsController",
     "Method": "GetStats",
     "RelativePath": "api/Stats",

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
+using static System.Net.WebRequestMethods;
 
 namespace StockNestMVC.Controllers;
 
@@ -57,6 +58,16 @@ public class AccountController : ControllerBase
     {
         var refreshToken = Request.Cookies["refreshToken"];
         await _accountService.Logout(refreshToken, HttpContext);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Path = "/"
+        };
+        Response.Cookies.Delete("accessToken", cookieOptions);
+        Response.Cookies.Delete("refreshToken", cookieOptions);
 
         return Ok("Logged out");
     }

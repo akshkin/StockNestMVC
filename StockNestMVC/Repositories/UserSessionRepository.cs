@@ -58,14 +58,17 @@ namespace StockNestMVC.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RevokeSessionAsync(int sessionId)
+        public async Task RevokeSessionAsync(int sessionId, string userId)
         {
-            var session = await _context.UserSessions.FindAsync(sessionId);
-            if (session != null)
-            {
-                session.IsRevoked = true;
-                await _context.SaveChangesAsync();
-            }
+            var session = await _context.UserSessions
+                .FirstOrDefaultAsync(s => s.UserSessionId == sessionId && s.UserId == userId);
+
+            if (session == null)
+                return;
+
+            session.IsRevoked = true;
+            await _context.SaveChangesAsync();
+        
         }
 
         public async Task UpdateSession(UserSession session)

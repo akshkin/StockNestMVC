@@ -142,7 +142,7 @@ public class AccountService : IAccountService
             Path = "/"
         };
 
-        await _userSessionService.RevokeSessionAsync(session.UserSessionId);
+        await _userSessionService.RevokeSessionById(session.UserSessionId, user.Id);
         http.Response.Cookies.Delete("accessToken", cookieOptions);
         http.Response.Cookies.Delete("refreshToken", cookieOptions);
 

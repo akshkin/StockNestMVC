@@ -212,3 +212,6 @@ C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net1
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Supabase.Storage.dll
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\System.Reactive.dll
 C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\Websocket.Client.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\MaxMind.Db.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\MaxMind.GeoIP2.dll
+C:\Users\aksh\Documents\lexicon\c-sharp\StockNestMVC\StockNestMVC\bin\Debug\net10.0\UAParser.dll
