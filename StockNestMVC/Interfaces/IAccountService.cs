@@ -7,9 +7,9 @@ namespace StockNestMVC.Interfaces;
 
 public interface IAccountService
 {
-    public Task<UserWithTokenDto> CreateUser(RegisterDto registerDto, HttpContext http);
+    public Task<UserWithTokenDto> CreateUser(RegisterDto registerDto, HttpContext http, string deviceName);
 
-    public Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto, HttpContext http);
+    public Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto, HttpContext http, string deviceName);
 
     public Task Refresh(string refreshToken, HttpContext http);
 

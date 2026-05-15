@@ -8,12 +8,13 @@ namespace StockNestMVC.Interfaces
 
         public Task<UserSession?> GetSessionByRefreshTokenAsync(string refreshToken);
 
-        public Task<List<UserSession>> GetUserSessionsAsync(int userId);
+        public Task<List<UserSession>> GetUserSessionsAsync(string userId);
 
         public Task RevokeSessionAsync(int sessionId);
 
-        public Task RevokeAllUserSessionsAsync(int userId, int? exceptSessionId = null);
+        public Task RevokeAllUserSessionsAsync(string userId, int? exceptSessionId = null);
 
-        public Task UpdateLastActivityAsync(string refreshToken);
+        public Task UpdateSession(UserSession session);
+
     }
 }
