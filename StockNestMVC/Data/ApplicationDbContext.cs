@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StockNestMVC.Models;
-using System.Reflection.Emit;
 
 namespace StockNestMVC.Data;
 
@@ -22,6 +21,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<UserGroup> UserGroup { get; set; }
 
     public DbSet<Notification> Notifications { get; set; }
+
+    public DbSet<UserSession> UserSessions { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -57,5 +58,18 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .WithMany()
             .HasForeignKey(n => n.GroupId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<UserSession>()
+           .HasOne(s => s.AppUser)
+           .WithMany(u => u.UserSessions)
+           .HasForeignKey(s => s.UserId)
+           .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserSession>()
+            .HasIndex(s => s.UserId);
+
+        builder.Entity<UserSession>()
+            .HasIndex(s => s.RefreshToken)
+            .IsUnique();
     }
 }

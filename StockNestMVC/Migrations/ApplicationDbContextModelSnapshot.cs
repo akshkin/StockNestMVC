@@ -409,6 +409,52 @@ namespace StockNestMVC.Migrations
                     b.ToTable("UserGroup");
                 });
 
+            modelBuilder.Entity("StockNestMVC.Models.UserSession", b =>
+                {
+                    b.Property<int>("UserSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserSessionId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeviceName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastActivityAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserSessionId");
+
+                    b.HasIndex("RefreshToken")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSessions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -533,9 +579,22 @@ namespace StockNestMVC.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("StockNestMVC.Models.UserSession", b =>
+                {
+                    b.HasOne("StockNestMVC.Models.AppUser", "AppUser")
+                        .WithMany("UserSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("StockNestMVC.Models.AppUser", b =>
                 {
                     b.Navigation("UserGroups");
+
+                    b.Navigation("UserSessions");
                 });
 
             modelBuilder.Entity("StockNestMVC.Models.Category", b =>

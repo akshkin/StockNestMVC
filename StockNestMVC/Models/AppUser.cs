@@ -26,4 +26,6 @@ public class AppUser : IdentityUser
     
     public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
 
+    public ICollection<UserSession> UserSessions { get; set; } = new List<UserSession>();
+
 }

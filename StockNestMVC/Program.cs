@@ -9,10 +9,8 @@ using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
 using StockNestMVC.Repositories;
 using StockNestMVC.Services;
-using Supabase;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,12 +91,15 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IUploadService, UploadService>();
+builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
+builder.Services.AddScoped<IUserSessionService, UserSessionService>();
+builder.Services.AddScoped<GeoService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        var allowedOrigins = new[] { "https://akshkin.github.io", "http://localhost:5173" };
+        var allowedOrigins = new[] { "https://akshkin.github.io", "http://localhost:5173", "http://localhost:4173" };
 
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()

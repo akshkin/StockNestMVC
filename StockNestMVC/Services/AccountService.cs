@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using StockNestMVC.DTOs;
 using StockNestMVC.DTOs.User;
 using StockNestMVC.Exceptions;
@@ -16,16 +15,23 @@ public class AccountService : IAccountService
     private readonly ITokenService _tokenService;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IUserRepository _userRepo;
+    private readonly IUserSessionService _userSessionService;
 
-    public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager, IUserRepository userRepo)
+    public AccountService(
+        UserManager<AppUser> userManager, 
+        ITokenService tokenService, 
+        SignInManager<AppUser> signInManager, 
+        IUserRepository userRepo,
+        IUserSessionService userSessionService)
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _signInManager = signInManager;
         _userRepo = userRepo;
+        _userSessionService = userSessionService;
     }
 
-    public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto, HttpContext http)
+    public async Task<UserWithTokenDto> CreateUser(RegisterDto registerDto, HttpContext http, string deviceName)
     {
         try
         {
@@ -41,7 +47,17 @@ public class AccountService : IAccountService
                     User = userDto,
                     Token = await _tokenService.CreateToken(newUser)
                 };
-                await GenerateTokens(newUser, http);
+               
+                var authResponse = await GenRefreshToken(newUser);
+                // User is valid, now create session
+                var session = await _userSessionService.CreateSessionAsync(
+                    newUser.Id,
+                    deviceName,
+                    http.Connection.RemoteIpAddress?.ToString(),
+                    authResponse.RefreshToken
+                );
+
+                await GenerateTokens(newUser, http, authResponse);
                 return userWithToken;
             }
             else
@@ -56,7 +72,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto, HttpContext http)
+    public async Task<UserWithTokenDto?> Login(LoginUserDto loginUserDto, HttpContext http, string deviceName)
     {
         var existingUser = await _userManager.FindByEmailAsync(loginUserDto.Email);
 
@@ -68,7 +84,17 @@ public class AccountService : IAccountService
         if (!passwordConfirmed.Succeeded)
             throw new UnauthorizedException("Invalid email or password");
 
-        await GenerateTokens(existingUser, http);
+        var authResponse = await GenRefreshToken(existingUser);
+
+        // User is valid, now create session
+        var session = await _userSessionService.CreateSessionAsync(
+            existingUser.Id,
+            deviceName,
+            http.Connection.RemoteIpAddress?.ToString(),
+            authResponse.RefreshToken
+        );
+
+        await GenerateTokens(existingUser, http, authResponse);
 
         return new UserWithTokenDto
         {
@@ -79,32 +105,47 @@ public class AccountService : IAccountService
 
     public async Task Refresh(string refreshToken, HttpContext http)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);        
+        var session = await _userSessionService.GetSessionByRefreshTokenAsync(refreshToken);
+        if (session == null)
+            throw new UnauthorizedException("Invalid or expired session");
 
-        if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+        var user = session.AppUser;
+
+        if (user == null)
         {
-            throw new UnauthorizedException("Invalid or expired refresh token");
+            throw new UnauthorizedException("User not found");
         }
         else
         {
-            await GenerateTokens(user, http);
+            var authResponse = await GenRefreshToken(user);
+            await GenerateTokens(user, http, authResponse);
+            // Update last activity
+            await _userSessionService.UpdateLastActivityAsync(session, authResponse.RefreshToken);
         }
     }
 
     public async Task Logout(string refreshToken, HttpContext http)
     {
         if (refreshToken == null) throw new UnauthorizedException("Missing refresh token");
-        
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
-        if (user == null) throw new UnauthorizedException("User not found");
 
-        user.RefreshToken = null;
-        user.RefreshTokenExpiryTime = DateTime.MinValue;
-        await RemoveRefreshToken(user);
-        await _userManager.UpdateAsync(user);
-        
-        http.Response.Cookies.Delete("accessToken");
-        http.Response.Cookies.Delete("refreshToken");
+        var session = await _userSessionService.GetSessionByRefreshTokenAsync(refreshToken);
+        if (session == null)
+            throw new UnauthorizedException("Invalid or expired session");
+
+        var user = session.AppUser;
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Path = "/"
+        };
+
+        await _userSessionService.RevokeSessionById(session.UserSessionId, user.Id);
+        http.Response.Cookies.Delete("accessToken", cookieOptions);
+        http.Response.Cookies.Delete("refreshToken", cookieOptions);
+
     }
 
     public async Task<CurrentUserDto> Me(ClaimsPrincipal claimsPrincipal)
@@ -164,16 +205,10 @@ public class AccountService : IAccountService
         await _userRepo.Logout(user);
     }
 
-    private async Task GenerateTokens(AppUser user, HttpContext http)
+    private async Task GenerateTokens(AppUser user, HttpContext http, AuthResponseDto authResponse, int? sessionId = null, bool isRefresh = false)
     {
-        var authResponse = await GenRefreshToken(user);
         var newAccessToken = authResponse.AccessToken;
         var newRefreshToken = authResponse.RefreshToken;
-
-        user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
-
-        await _userManager.UpdateAsync(user);
 
         http.Response.Cookies.Append("accessToken", newAccessToken, new CookieOptions
         {

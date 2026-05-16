@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StockNestMVC.DTOs.User;
 using StockNestMVC.Interfaces;
+using static System.Net.WebRequestMethods;
 
 namespace StockNestMVC.Controllers;
 
@@ -22,16 +23,19 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
         if (!ModelState.IsValid) return BadRequest("Invalid fields");
+
+        string deviceName = Request.Headers["User-Agent"];
        
-        var userWithToken = await _accountService.CreateUser(registerDto, HttpContext);            
+        var userWithToken = await _accountService.CreateUser(registerDto, HttpContext, deviceName);            
 
         return Ok(userWithToken);     
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginUserDto loginUserDto)
-    { 
-        var userWithToken = await _accountService.Login(loginUserDto, HttpContext);
+    {
+        string deviceName = Request.Headers["User-Agent"];
+        var userWithToken = await _accountService.Login(loginUserDto, HttpContext, deviceName);
 
         return Ok(userWithToken);
     }
@@ -54,6 +58,16 @@ public class AccountController : ControllerBase
     {
         var refreshToken = Request.Cookies["refreshToken"];
         await _accountService.Logout(refreshToken, HttpContext);
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Path = "/"
+        };
+        Response.Cookies.Delete("accessToken", cookieOptions);
+        Response.Cookies.Delete("refreshToken", cookieOptions);
 
         return Ok("Logged out");
     }
