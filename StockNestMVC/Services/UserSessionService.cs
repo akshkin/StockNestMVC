@@ -105,7 +105,7 @@ public class UserSessionService : IUserSessionService
             {
                 if (!geoCache.TryGetValue(ip, out var location))
                 {
-                    location = _geoService.GetLocation(ip);
+                    location = await _geoService.GetLocation(ip);
                     geoCache[ip] = location;
                 }
 

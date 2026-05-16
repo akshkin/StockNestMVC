@@ -1,18 +1,24 @@
-﻿using MaxMind.GeoIP2;
-using MaxMind.GeoIP2.Exceptions;
+﻿using IPinfo;
+using IPinfo.Models;
 
 namespace StockNestMVC.Services;
 
 public class GeoService
 {
-    private readonly DatabaseReader _reader;
+    private readonly IPinfoClient _client;
 
-    public GeoService()
+    public GeoService(IConfiguration config)
     {
-        _reader = new DatabaseReader("GeoLite2-City.mmdb");
-    }
+        var token = config["IPInfo:Token"];
 
-    public (string country, string city) GetLocation(string ip)
+        if (string.IsNullOrWhiteSpace(token))
+            throw new Exception("IPINFO_TOKEN is missing");
+
+        _client = new IPinfoClient.Builder()
+            .AccessToken(token)
+            .Build();
+    }
+    public async Task<(string country, string city)> GetLocation(string ip)
     {
         if (string.IsNullOrWhiteSpace(ip))
             return ("Unknown", "Unknown");
@@ -22,14 +28,14 @@ public class GeoService
 
         try
         {
-            var response = _reader.City(ip);
+            var response = await _client.IPApi.GetDetailsAsync(ip);
 
             return (
-                response.Country?.Name ?? "Unknown",
-                response.City?.Name ?? "Unknown"
+                response.Country ?? "Unknown",
+                response.City ?? "Unknown"
             );
         }
-        catch (AddressNotFoundException)
+        catch
         {
             return ("Unknown", "Unknown");
         }
