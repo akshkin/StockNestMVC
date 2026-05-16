@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 using StockNestMVC.Data;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;

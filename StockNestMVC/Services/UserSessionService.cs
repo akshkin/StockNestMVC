@@ -3,9 +3,7 @@ using StockNestMVC.DTOs;
 using StockNestMVC.Exceptions;
 using StockNestMVC.Interfaces;
 using StockNestMVC.Models;
-using Supabase.Gotrue;
 using System.Security.Claims;
-using System.Security.Principal;
 using UAParser;
 
 namespace StockNestMVC.Services;
@@ -70,13 +68,6 @@ public class UserSessionService : IUserSessionService
         bool isCurrentSession = currentSession?.UserSessionId == sessionId;
 
         return isCurrentSession;
-
-        // If user revoked current session → log them out
-        //if (currentSession?.UserSessionId == sessionId)
-        //{
-        //    http.Response.Cookies.Delete("accessToken");
-        //    http.Response.Cookies.Delete("refreshToken");
-        //}
     }
 
     public async Task RevokeSessionById(int sessionId, string userId)
@@ -124,7 +115,7 @@ public class UserSessionService : IUserSessionService
 
             result.Add(new UserSessionResponseDto
             {
-                SessionId = session.UserSessionId,
+                SessionId = userSession.UserSessionId,
                 DeviceName = deviceLabel,
                 Location = $"{city}, {country}",
                 IpAddress = userSession.IpAddress,
