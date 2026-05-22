@@ -29,12 +29,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -43,7 +39,7 @@
               "RelativeDocumentMoniker": "StockNestMVC\\Program.cs",
               "ToolTip": "C:\\Users\\aksh\\Documents\\lexicon\\c-sharp\\StockNestMVC\\StockNestMVC\\Program.cs",
               "RelativeToolTip": "StockNestMVC\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKUAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAAHoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-16T10:43:55.902Z",
               "EditorCaption": ""
@@ -94,8 +90,11 @@
               "RelativeToolTip": "StockNestMVC\\appsettings.json",
               "ViewState": "AgIAAAIAAAAAAAAAAAAcwBYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-16T10:41:50.407Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T10:41:50.407Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             }
           ]
         }
