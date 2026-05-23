@@ -53,7 +53,8 @@ public class AccountService : IAccountService
                 var session = await _userSessionService.CreateSessionAsync(
                     newUser.Id,
                     deviceName,
-                    http.Connection.RemoteIpAddress?.ToString(),
+                    GetClientIp(http),
+                    //http.Connection.RemoteIpAddress?.ToString(),
                     authResponse.RefreshToken
                 );
 
@@ -90,7 +91,8 @@ public class AccountService : IAccountService
         var session = await _userSessionService.CreateSessionAsync(
             existingUser.Id,
             deviceName,
-            http.Connection.RemoteIpAddress?.ToString(),
+            GetClientIp(http),
+            //http.Connection.RemoteIpAddress?.ToString(),
             authResponse.RefreshToken
         );
 
@@ -225,5 +227,17 @@ public class AccountService : IAccountService
             SameSite = SameSiteMode.None,
             Expires = DateTime.UtcNow.AddDays(1) // change later to 2 days?           
         });
+    }
+
+    private string GetClientIp(HttpContext http)
+    {
+        var forwardedFor = http.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+        if (!string.IsNullOrEmpty(forwardedFor))
+        {
+            return forwardedFor.Split(',')[0].Trim();
+        }
+
+        return http.Connection.RemoteIpAddress?.ToString();
     }
 }

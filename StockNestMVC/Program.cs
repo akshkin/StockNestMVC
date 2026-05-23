@@ -28,6 +28,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor |
         ForwardedHeaders.XForwardedProto;
+
+    // Clearing KnownNetworks and KnownProxies to ensure headers are trusted from specific proxies only
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
