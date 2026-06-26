@@ -225,7 +225,7 @@ public class AccountService : IAccountService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddDays(1) // change later to 2 days?           
+            Expires = DateTime.UtcNow.AddDays(7)          
         });
     }
 

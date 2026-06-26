@@ -30,7 +30,7 @@ public class UserSessionService : IUserSessionService
             DeviceName = deviceName,
             IpAddress = ipAddress,
             CreatedAt = DateTime.UtcNow,
-            ExpiresAt = DateTime.UtcNow.AddDays(30),
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
             LastActivityAt = DateTime.UtcNow,
             IsRevoked = false
         };
