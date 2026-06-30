@@ -308,4 +308,45 @@ public class GroupService : IGroupService
         else
             throw new ForbiddenException("Only the group owner can delete users");
     }
+
+    public async Task EditGroupMemberRole(int groupId, ClaimsPrincipal claimsPrincipal, string userId, string role)
+    {
+        var user = await _userManager.GetUserAsync(claimsPrincipal);
+
+        if (user == null)
+            throw new UnauthorizedException("User not found");
+
+        var userGroup = await _groupRepo.GetUserGroup(groupId, user);
+
+        if (userGroup == null)
+            throw new NotFoundException("Group not found");
+
+        var member = await _userManager.FindByIdAsync(userId);
+
+        if (member == null)
+            throw new NotFoundException("User does not exist");
+
+        // check if user is a member of the group
+        var membership = await _groupRepo.GetUserGroup(groupId, member);
+
+        if (membership == null)
+            throw new NotFoundException("User is not a member of this group");
+
+        var roleInGroup = await _groupRepo.GetRoleInGroup(groupId, user);
+
+        if (roleInGroup == "Owner" || roleInGroup == "Co-Owner")
+        {
+            membership.Role = role;
+
+            var group = await _groupRepo.GetGroupById(groupId, user);
+
+            // notify added member
+            string userMessage = $"{user.FullName} changed your role to {role} in the group {group.Name}";
+            await _notificationRepo.NotifyAddedRemovedMember(groupId, member.Id, userMessage, Enums.NotificationType.UserRoleChanged);
+
+            await _groupRepo.EditGroupMemberRole(membership);
+        }
+        else
+            throw new ForbiddenException("Only the group owner can invite users");
+    }
 }

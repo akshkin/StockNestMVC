@@ -94,6 +94,12 @@ public class GroupRepository : IGroupRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task EditGroupMemberRole(UserGroup membership)
+    {
+        _context.UserGroup.Update(membership);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<bool> CheckDuplicateGroup(AppUser user, string groupName, int? groupId)
     {
         bool duplicate;
