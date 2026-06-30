@@ -16,5 +16,7 @@ namespace StockNestMVC.Interfaces
 
         public Task UpdateSession(UserSession session);
 
+        public Task DeleteExpiredSessions();
+
     }
 }

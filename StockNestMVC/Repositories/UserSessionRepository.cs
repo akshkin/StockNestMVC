@@ -75,5 +75,19 @@ namespace StockNestMVC.Repositories
             _context.UserSessions.Update(session);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteExpiredSessions()
+        {
+            var expiredSessions = await _context.UserSessions
+                .Where(s => s.ExpiresAt < DateTime.UtcNow)
+                .ToListAsync();
+
+            if (!expiredSessions.Any())
+                return;
+
+            _context.UserSessions.RemoveRange(expiredSessions);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

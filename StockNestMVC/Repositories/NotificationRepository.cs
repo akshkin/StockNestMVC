@@ -123,4 +123,18 @@ public class NotificationRepository : INotificationRepository
 
         return count;
     }
+
+    public async Task DeleteOldReadNotifications()
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-30);
+
+        var oldNotifications = await _context.Notifications
+            .Where(n => n.Seen && n.CreatedAt < cutoff).ToListAsync();
+
+        if (!oldNotifications.Any()) return;
+
+        _context.Notifications.RemoveRange(oldNotifications);
+
+        await _context.SaveChangesAsync();
+    }
 }
