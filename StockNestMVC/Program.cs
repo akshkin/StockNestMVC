@@ -108,6 +108,7 @@ builder.Services.AddScoped<IUploadService, UploadService>();
 builder.Services.AddScoped<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddScoped<IUserSessionService, UserSessionService>();
 builder.Services.AddScoped<GeoService>();
+builder.Services.AddHostedService<CleanupBackgroundService>();
 
 builder.Services.AddCors(options =>
 {

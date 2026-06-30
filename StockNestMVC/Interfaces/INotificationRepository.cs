@@ -21,4 +21,6 @@ public interface INotificationRepository
 
     public Task<int> GetUnreadNotificationsCount(string userId);
 
+    public Task DeleteOldReadNotifications();
+
 }
