@@ -225,6 +225,32 @@
   },
   {
     "ContainingType": "StockNestMVC.Controllers.GroupsController",
+    "Method": "EditGroupMemberRole",
+    "RelativePath": "api/Groups/{groupId}/editMemberRole/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "StockNestMVC.DTOs.Group.EditMemberRoleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "StockNestMVC.Controllers.GroupsController",
     "Method": "InviteUser",
     "RelativePath": "api/Groups/{groupId}/invite",
     "HttpMethod": "POST",

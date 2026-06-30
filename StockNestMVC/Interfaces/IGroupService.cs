@@ -21,5 +21,7 @@ public interface IGroupService
 
     public Task RemoveGroupMember(int groupId, ClaimsPrincipal claimsPrincipal, string userId);
 
+    public Task EditGroupMemberRole(int groupId, ClaimsPrincipal claimsPrincipal, string userId, string role);
+
 
 }

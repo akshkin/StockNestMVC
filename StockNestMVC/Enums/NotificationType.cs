@@ -11,5 +11,6 @@ public enum NotificationType
     ItemUpdated,
     ItemDeleted,
     UserJoinedGroup,
-    UserRemovedFromGroup
+    UserRemovedFromGroup,
+    UserRoleChanged
 }

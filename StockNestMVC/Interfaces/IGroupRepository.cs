@@ -28,6 +28,8 @@ public interface IGroupRepository
 
     public Task RemoveGroupMember(int groupId, UserGroup membership);
 
+    public Task EditGroupMemberRole(UserGroup membership);
+
     public Task<bool> CheckDuplicateGroup(AppUser user, string groupName, int? groupId);
 
     public Task<bool> CheckIfMemberInGroup(int groupId, AppUser user);

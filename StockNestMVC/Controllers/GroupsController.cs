@@ -89,4 +89,11 @@ public class GroupsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{groupId}/editMemberRole/{userId}")]
+    public async Task<IActionResult> EditGroupMemberRole(int groupId, string userId, EditMemberRoleDto dto)
+    {
+        await _groupService.EditGroupMemberRole(groupId, User, userId, dto.Role);
+        return NoContent();
+    }
 }
